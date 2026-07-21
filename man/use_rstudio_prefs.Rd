@@ -11,7 +11,9 @@ use_rstudio_prefs(...)
 \verb{always_save_history = FALSE, rainbow_parentheses = TRUE}}
 }
 \value{
-NULL, updates RStudio \code{rstudio-prefs.json} file
+updates RStudio \code{rstudio-prefs.json} file and returns a list of the
+updated preferences or NULL if there are none. When \code{.write_json = FALSE},
+returns the full list of all preferences without writing to file.
 }
 \description{
 This function updates the RStudio preferences saved in
@@ -20,7 +22,7 @@ modified are listed here
 \url{https://docs.rstudio.com/ide/server-pro/session-user-settings.html}
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # pass preferences individually --------------
 use_rstudio_prefs(
   always_save_history = FALSE,

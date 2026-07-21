@@ -9,7 +9,9 @@
 #' `always_save_history = FALSE, rainbow_parentheses = TRUE`
 #'
 #' @export
-#' @return NULL, updates RStudio `rstudio-prefs.json` file
+#' @return updates RStudio `rstudio-prefs.json` file and returns a list of the
+#'   updated preferences or NULL if there are none. When `.write_json = FALSE`,
+#'   returns the full list of all preferences without writing to file.
 #' @author Daniel D. Sjoberg
 #'
 #' @examplesIf interactive()

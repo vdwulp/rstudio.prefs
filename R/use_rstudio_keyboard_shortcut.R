@@ -14,7 +14,10 @@
 #' file before it's updated. Default is `TRUE`
 #'
 #' @export
-#' @return NULL, updates RStudio `addins.json` file
+#' @return updates RStudio `addins.json` file and returns a list of the
+#'   updated keyboard shortcuts or NULL if there are none. When
+#'   `.write_json = FALSE`, returns the full list of all keyboard shortcuts
+#'   without writing to file.
 #' @author Daniel D. Sjoberg
 #'
 #' @examplesIf interactive()

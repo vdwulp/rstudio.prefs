@@ -20,14 +20,17 @@ them to file.}
 file before it's updated. Default is \code{TRUE}}
 }
 \value{
-NULL, updates RStudio \code{addins.json} file
+updates RStudio \code{addins.json} file and returns a list of the
+updated keyboard shortcuts or NULL if there are none. When
+\code{.write_json = FALSE}, returns the full list of all keyboard shortcuts
+without writing to file.
 }
 \description{
 This function updates the RStudio keyboard shortcuts saved in
 the \code{addins.json} file.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 use_rstudio_keyboard_shortcut(
   "Ctrl+Shift+/" = "rstudio.prefs::make_path_norm"
 )

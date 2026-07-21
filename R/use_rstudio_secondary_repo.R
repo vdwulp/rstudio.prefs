@@ -2,7 +2,7 @@
 #'
 #' This function updates the RStudio preferences saved in
 #' the `rstudio-prefs.json` file to include the secondary repositories
-#' passed my the user. If a new name for an existing repository is
+#' passed by the user. If a new name for an existing repository is
 #' passed by the user, the name will be updated in the JSON file.
 #'
 #' A note for users outside of the USA.
@@ -14,7 +14,8 @@
 #' `ropensci = "https://ropensci.r-universe.dev"`
 #'
 #' @export
-#' @return NULL, updates RStudio `rstudio-prefs.json` file
+#' @return updates RStudio `rstudio-prefs.json` file and returns a list of the
+#'   updated secondary repositories or NULL if there are none.
 #' @author Daniel D. Sjoberg
 #'
 #' @examplesIf interactive()
