@@ -10,7 +10,7 @@ make_path_norm()
 normalized path string
 }
 \description{
-Wrapper to execute \code{\link[fs:path_math]{fs::path_norm()}} as a shortcut on
+Wrapper to execute \code{\link[fs:path_norm]{fs::path_norm()}} as a shortcut on
 highlighted text. The updated text will be converted in place to a path
 normalized for the environment currently in use.
 For instance, \ or \\\ will be converted to / on Windows machines.
@@ -38,5 +38,5 @@ if (interactive()) {
 }
 }
 \seealso{
-\link[fs:path_math]{fs::path_norm}
+\link[fs:path_norm]{fs::path_norm}
 }

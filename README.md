@@ -29,7 +29,7 @@ devtools::install_github("ddsjoberg/rstudio.prefs")
 ### Set RStudio Preferences
 
 Update the RStudio default preferences.
-Full list of modifiable settings here: https://docs.rstudio.com/ide/server-pro/session-user-settings.html
+Full list of modifiable settings here: https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html
 
 ``` r
 library(rstudio.prefs)
