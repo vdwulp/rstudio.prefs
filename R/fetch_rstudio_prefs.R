@@ -1,7 +1,7 @@
 #' Fetch table of RStudio Preferences
 #'
 #' Preferences are fetched from
-#' [https://docs.rstudio.com/ide/server-pro/session-user-settings.html](https://docs.rstudio.com/ide/server-pro/session-user-settings.html)
+#' [https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html](https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html)
 #'
 #' @section Details:
 #' Only preferences of type `"boolean"`, `"string"`, `"number"`, `"integer"`,
@@ -17,7 +17,7 @@
 #'
 #' fetch_rstudio_prefs()
 fetch_rstudio_prefs <- function() {
-  url <- "https://docs.rstudio.com/ide/server-pro/session_user_settings/session_user_settings.html"
+  url <- "https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html"
   cli::cli_alert_success("Downloading list of available {.field RStudio} settings")
   cat("\n")
   tryCatch(

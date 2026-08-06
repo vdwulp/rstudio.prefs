@@ -3,13 +3,15 @@
 #' This function updates the RStudio preferences saved in
 #' the `rstudio-prefs.json` file. A full listing of preferences that may be
 #' modified are listed here
-#' \url{https://docs.rstudio.com/ide/server-pro/session-user-settings.html}
+#' \url{https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html}
 #'
 #' @param ... series of RStudio preferences to update, e.g.
 #' `always_save_history = FALSE, rainbow_parentheses = TRUE`
 #'
 #' @export
-#' @return NULL, updates RStudio `rstudio-prefs.json` file
+#' @return Invisibly returns the updated preferences as a named list on success,
+#'   or `NULL` if no updates were made (no changes, user aborted, or not in an
+#’   interactive session).
 #' @author Daniel D. Sjoberg
 #'
 #' @examplesIf interactive()

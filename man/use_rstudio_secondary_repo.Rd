@@ -11,12 +11,14 @@ use_rstudio_secondary_repo(...)
 \code{ropensci = "https://ropensci.r-universe.dev"}}
 }
 \value{
-NULL, updates RStudio \code{rstudio-prefs.json} file
+Invisibly returns the updated \code{cran_mirror} preference as a named
+list on success, or \code{NULL} if no updates were made (no changes, user
+aborted, or not in an interactive session).
 }
 \description{
 This function updates the RStudio preferences saved in
 the \code{rstudio-prefs.json} file to include the secondary repositories
-passed my the user. If a new name for an existing repository is
+passed by the user. If a new name for an existing repository is
 passed by the user, the name will be updated in the JSON file.
 }
 \details{
@@ -26,7 +28,7 @@ in the JSON preferences file (typically, auto set by RStudio),
 the \code{use_rstudio_secondary_repo()} function will set \code{"country" = "us"}.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 use_rstudio_secondary_repo(
   ropensci = "https://ropensci.r-universe.dev",
   ddsjoberg = "https://ddsjoberg.r-universe.dev"

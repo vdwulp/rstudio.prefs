@@ -5,21 +5,30 @@
 #'
 #' @param ... series of RStudio keyboard shortcuts to update. The argument
 #' name is the keyboard shortcut, and the value is a string of the function
-#' name that will execute. See examples.
+#' name that will execute, or `NULL` to remove the shortcut. If a new shortcut
+#' shares a key or function with an existing one, the previous binding is
+#' removed.
 #' @param .write_json logical indicating whether to update and overwrite
 #' the existing JSON file of options. Default is `TRUE`. When `FALSE`,
-#' the function will return a list of all options, instead of writing
+#' the function will return a list of all shortcuts, instead of writing
 #' them to file.
-#' @param .backup logical indicating whether to create a back-up of preferences
-#' file before it's updated. Default is `TRUE`
+#' @param .backup logical indicating whether to create a back-up of shortcuts
+#' file before it's updated. Default is `TRUE`.
 #'
 #' @export
-#' @return NULL, updates RStudio `addins.json` file
+#' @return When `.write_json = FALSE`, a named list of all shortcuts including
+#'   the updates. Otherwise `NULL` invisibly.
 #' @author Daniel D. Sjoberg
 #'
 #' @examplesIf interactive()
+#' # Add a shortcut
 #' use_rstudio_keyboard_shortcut(
 #'   "Ctrl+Shift+/" = "rstudio.prefs::make_path_norm"
+#' )
+#'
+#' # Remove a shortcut
+#' use_rstudio_keyboard_shortcut(
+#'   "Ctrl+Shift+/" = NULL
 #' )
 
 use_rstudio_keyboard_shortcut <- function(..., .write_json = TRUE, .backup = TRUE) {
@@ -50,23 +59,38 @@ use_rstudio_keyboard_shortcut <- function(..., .write_json = TRUE, .backup = TRU
   # invert list names and values -----------------------------------------------
   i_list_current_shortcuts <- invert_list_names_and_values(list_current_shortcuts)
 
+  # remove stale bindings for functions that are being reassigned or removed ---
+  i_list_remaining_shortcuts <- i_list_current_shortcuts[
+    !unlist(i_list_current_shortcuts) %in% unname(unlist(i_list_updated_shortcuts)) |
+      names(i_list_current_shortcuts) %in% names(i_list_updated_shortcuts)
+  ]
+
+  # list vacated shortcuts as NULL so they appear in the update summary --------
+  vacated_keys <- setdiff(names(i_list_current_shortcuts), names(i_list_remaining_shortcuts))
+  i_list_vacated_shortcuts <- stats::setNames(rep(list(NULL), length(vacated_keys)), vacated_keys)
+
   # print updates that will be made --------------------------------------------
-  any_update <- pretty_print_updates(i_list_current_shortcuts, i_list_updated_shortcuts)
-  # if no updates, abort function execution
+  any_update <- pretty_print_updates(
+    i_list_current_shortcuts,
+    c(i_list_updated_shortcuts, i_list_vacated_shortcuts)
+  )
+
+  # if no updates, abort function execution ------------------------------------
   if (!any_update) {
     return(invisible(NULL))
   }
-  # ask user to abort or not
+
+  # ask user to abort or not ---------------------------------------------------
   if (!startsWith(tolower(readline("Would you like to continue? [y/n] ")), "y")) {
     return(invisible(NULL))
   }
 
-  # update prefs, convert to JSON, and save file -------------------------------
+  # merge new shortcuts, NULL values are removed by modifyList -----------------
   list_final_shortcuts <-
-    i_list_current_shortcuts %>%
-    purrr::update_list(!!!i_list_updated_shortcuts) %>%
+    utils::modifyList(i_list_remaining_shortcuts, i_list_updated_shortcuts) %>%
     invert_list_names_and_values()
 
+  # convert to JSON and save file ----------------------------------------------
   if (isTRUE(.write_json)) {
     write_json(
       list_final_shortcuts,
@@ -107,10 +131,10 @@ check_shortcut_consistency <- function(x) {
   if (!rlang::is_named(x)) {
     rlang::abort("Each argument must be named.")
   }
-  if (purrr::some(x, ~!rlang::is_string(.))) {
-    rlang::abort("Each argument value must be a string")
+  if (purrr::some(x, ~!rlang::is_string(.) && !is.null(.))) {
+    rlang::abort("Each argument value must be a string or NULL")
   }
-  if (purrr::some(x, ~!rlang::is_function(eval(rlang::parse_expr(.))))) {
+  if (purrr::some(x, ~!is.null(.) && !tryCatch(rlang::is_function(eval(rlang::parse_expr(.))), error = function(e) FALSE))) {
     rlang::abort("Each argument value must be a string of a function name.")
   }
 }
