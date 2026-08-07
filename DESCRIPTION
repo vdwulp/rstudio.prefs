@@ -1,12 +1,10 @@
 Package: rstudio.prefs
 Title: Set 'RStudio' Preferences
 Version: 0.1.9.9000
-Authors@R: 
-    person(given = "Daniel D.",
-           family = "Sjoberg",
-           role = c("aut", "cre", "cph"),
-           email = "danield.sjoberg@gmail.com",
-           comment = c(ORCID = "0000-0003-0862-2018"))
+Authors@R: c(
+    person("S.A.", "van der Wulp", , "vdwulp@gmail.com", role = c("aut", "cre", "cph")),
+    person("Daniel D.", "Sjoberg", , "danield.sjoberg@gmail.com", role = c("aut", "cph"),
+           comment = c(ORCID = "0000-0003-0862-2018")))
 Description: As of 'RStudio' v1.3, the preferences in the Global Options
     dialog (and a number of other preferences that aren’t) are now saved
     in simple, plain-text JSON files. This package provides an interface
@@ -15,9 +13,9 @@ Description: As of 'RStudio' v1.3, the preferences in the Global Options
     particularly helpful when working on teams to ensure a unified
     experience across machines and utilizing settings for best practices.
 License: GPL (>= 3)
-URL: https://github.com/ddsjoberg/rstudio.prefs,
-    https://www.danieldsjoberg.com/rstudio.prefs/index.html
-BugReports: https://github.com/ddsjoberg/rstudio.prefs/issues
+URL: https://github.com/vdwulp/rstudio.prefs,
+    https://vdwulp.github.io/rstudio.prefs/
+BugReports: https://github.com/vdwulp/rstudio.prefs/issues
 Depends: 
     R (>= 3.4)
 Imports: 

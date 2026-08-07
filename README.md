@@ -1,8 +1,8 @@
 # rstudio.prefs
 
 <!-- badges: start -->
-[![Codecov test coverage](https://codecov.io/gh/ddsjoberg/rstudio.prefs/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ddsjoberg/rstudio.prefs?branch=main)
-[![R-CMD-check](https://github.com/ddsjoberg/rstudio.prefs/workflows/R-CMD-check/badge.svg)](https://github.com/ddsjoberg/rstudio.prefs/actions)
+[![Codecov test coverage](https://codecov.io/gh/vdwulp/rstudio.prefs/branch/main/graph/badge.svg)](https://app.codecov.io/gh/vdwulp/rstudio.prefs/tree/main)
+[![R-CMD-check](https://github.com/vdwulp/rstudio.prefs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/vdwulp/rstudio.prefs/actions/workflows/R-CMD-check.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/rstudio.prefs)](https://CRAN.R-project.org/package=rstudio.prefs)
 <!-- badges: end -->
 
@@ -18,12 +18,13 @@ Install {rstudio.prefs} from CRAN with:
 install.packages("rstudio.prefs")
 ```
 
-Install the development version of {rstudio.prefs} from [GitHub](https://github.com/ddsjoberg/rstudio.prefs) with:
+Install the development version of {rstudio.prefs} from [GitHub](https://github.com/vdwulp/rstudio.prefs) with:
 
 ``` r
 # install.packages('devtools')
-devtools::install_github("ddsjoberg/rstudio.prefs")
+devtools::install_github("vdwulp/rstudio.prefs")
 ```
+
 ## Examples
 
 ### Set RStudio Preferences
@@ -89,3 +90,8 @@ use_rstudio_keyboard_shortcut(
 #> √ File 'C:/Users/sjobergd/AppData/Roaming/RStudio/keybindings/addins.json' updated.
 #> * Restart RStudio for updates to take effect.
 ```
+
+## Package history
+{rstudio.prefs} was originally created and developed by
+[Daniel D. Sjoberg](https://github.com/ddsjoberg). Maintenance was transferred
+to [S.A. van der Wulp](https://github.com/vdwulp) starting with v0.2.0.
