@@ -11,7 +11,7 @@ tibble
 }
 \description{
 Preferences are fetched from
-\url{https://docs.rstudio.com/ide/server-pro/session-user-settings.html}
+\url{https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html}
 }
 \section{Details}{
 
