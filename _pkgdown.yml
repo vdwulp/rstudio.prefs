@@ -1,28 +1,15 @@
-url: http://www.danieldsjoberg.com/rstudio.prefs/
+url: https://vdwulp.github.io/rstudio.prefs
 
 template:
-  params:
-    bootswatch: flatly
-development:
-  mode: auto
-  version_label: default
+  bootstrap: 5
 
 authors:
-  Daniel D. Sjoberg:
-    href: "http://www.danieldsjoberg.com/"
-
-navbar:
-  type: default
-  left:
-  - icon: fa-home
-    href: index.html
-  - text: Reference
-    href: reference/index.html
-  - text: News
-    href: news/index.html
-  right:
-  - icon: fa-github fa-lg
-    href: https://github.com/ddsjoberg/rstudio.prefs
+  "Daniel D. Sjoberg":
+    href: https://www.danieldsjoberg.com/
+    html: ddsjoberg
+  "S.A. van der Wulp":
+    href: https://vdwulp.github.io/
+    html: vdwulp
 
 reference:
   - title: Modify RStudio Settings
