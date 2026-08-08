@@ -7,7 +7,19 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+❯ checking CRAN incoming feasibility ... NOTE
+  Maintainer: 'S.A. van der Wulp <vdwulp@gmail.com>'
+  
+  New maintainer:
+    S.A. van der Wulp <vdwulp@gmail.com>
+  Old maintainer(s):
+    Daniel D. Sjoberg <danield.sjoberg@gmail.com>
+
+0 errors | 0 warnings | 1 note 
+
+## Reverse dependencies
+
+Checked 1 reverse dependency: myownrobs 1.0.0 — no errors, warnings, or notes.
 
 ## Additional Comments
 

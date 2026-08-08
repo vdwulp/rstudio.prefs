@@ -1,23 +1,22 @@
 Package: rstudio.prefs
-Title: Set 'RStudio' Preferences
-Version: 0.1.9.9000
+Title: Manage 'RStudio' Preferences and Addin Shortcuts
+Version: 0.2.0
 Authors@R: c(
     person("S.A.", "van der Wulp", , "vdwulp@gmail.com", role = c("aut", "cre", "cph")),
     person("Daniel D.", "Sjoberg", , "danield.sjoberg@gmail.com", role = c("aut", "cph"),
            comment = c(ORCID = "0000-0003-0862-2018")))
-Description: As of 'RStudio' v1.3, the preferences in the Global Options
-    dialog (and a number of other preferences that aren’t) are now saved
-    in simple, plain-text JSON files. This package provides an interface
-    for working with these 'RStudio' JSON preference files to easily make
-    modifications without using the point-and-click option menus. This is
-    particularly helpful when working on teams to ensure a unified
-    experience across machines and utilizing settings for best practices.
+Description: Provides an interface for working with 'RStudio' preference files
+    to modify settings and addin shortcuts without using point-and-click option
+    menus. Useful for ensuring a unified experience across devices and for
+    enforcing best practices. Also exposes some settings not available in the
+    Global Options dialog.
 License: GPL (>= 3)
 URL: https://github.com/vdwulp/rstudio.prefs,
     https://vdwulp.github.io/rstudio.prefs/
 BugReports: https://github.com/vdwulp/rstudio.prefs/issues
+SystemRequirements: RStudio (>= 1.3)
 Depends: 
-    R (>= 3.4)
+    R (>= 3.5)
 Imports: 
     cli (>= 2.5.0),
     dplyr (>= 1.0.6),

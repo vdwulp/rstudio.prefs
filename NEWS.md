@@ -1,4 +1,40 @@
-# rstudio.prefs (development version)
+# rstudio.prefs 0.2.0
+
+### New
+
+* `use_rstudio_keyboard_shortcut()` now supports shortcut removal by passing
+  `NULL` as the value ([#22](https://github.com/vdwulp/rstudio.prefs/issues/22)).
+
+### Fixes
+
+* Fixed bug in `use_rstudio_keyboard_shortcut()` where reassigning a shortcut to
+  a function that already had one produced a corrupted `addins.json` entry with
+  a `.1` suffix, causing the new shortcut to silently fail
+  ([#22](https://github.com/vdwulp/rstudio.prefs/issues/22)).
+
+* Replaced deprecated `purrr::update_list()` with base R `modifyList()` in
+  `use_rstudio_keyboard_shortcut()`
+  ([#22](https://github.com/vdwulp/rstudio.prefs/issues/22)).
+
+* Fixed `check_shortcut_consistency()` erroring early when passed a non-existent
+  name; wrapped `eval(rlang::parse_expr(.))` in `tryCatch()`
+  ([#24](https://github.com/vdwulp/rstudio.prefs/pull/24)).
+
+* Updated URL in `fetch_rstudio_prefs()` to current docs, fixing missing
+  preferences such as `enable_splash_screen`
+  ([#20](https://github.com/vdwulp/rstudio.prefs/issues/20)).
+
+* Updated `@return` documentation for `use_rstudio_prefs()`,
+  `use_rstudio_secondary_repo()`, and `use_rstudio_keyboard_shortcut()`
+  ([#19](https://github.com/vdwulp/rstudio.prefs/pull/19)).
+
+### Other
+
+* Maintainer transferred from Daniel D. Sjoberg to S.A. van der Wulp
+  ([#20](https://github.com/vdwulp/rstudio.prefs/issues/20)).
+
+* Modernized package title, description, internal prefs data and GitHub Actions
+  workflows. Increased testing coverage.
 
 # rstudio.prefs 0.1.9
 
