@@ -1,15 +1,15 @@
-# rstudio.prefs
+# ⚙️ rstudio.prefs
 
 <!-- badges: start -->
-[![Codecov test coverage](https://codecov.io/gh/vdwulp/rstudio.prefs/branch/main/graph/badge.svg)](https://app.codecov.io/gh/vdwulp/rstudio.prefs/tree/main)
-[![R-CMD-check](https://github.com/vdwulp/rstudio.prefs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/vdwulp/rstudio.prefs/actions/workflows/R-CMD-check.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/rstudio.prefs)](https://CRAN.R-project.org/package=rstudio.prefs)
+[![R-CMD-check](https://github.com/vdwulp/rstudio.prefs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/vdwulp/rstudio.prefs/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/vdwulp/rstudio.prefs/branch/main/graph/badge.svg)](https://app.codecov.io/gh/vdwulp/rstudio.prefs/tree/main)
 <!-- badges: end -->
 
-*Manage RStudio Preferences and Addin Shortcuts*
+*Manage RStudio preferences and addin shortcuts*
 
 The {rstudio.prefs} package provides a programmatic interface for working with
-'RStudio' preference files to modify settings and addin keyboard shortcuts
+RStudio preference files to modify settings and addin keyboard shortcuts
 without using point-and-click option menus. This is useful for teams and
 individuals working across multiple devices who want a **unified experience**
 and for enforcing **best practices**. The package also exposes settings not available
