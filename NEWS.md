@@ -1,3 +1,8 @@
+# rstudio.prefs (development version)
+
+* Fixed documentation errors in `check_min_rstudio_version()`, and typos in
+  `backup_file()` and `is_windows()`.
+
 # rstudio.prefs 0.2.0
 
 ### New

@@ -5,11 +5,13 @@
 #' @param version string of min required version number
 #' @export
 #' @return path string to RStudio `rstudio-prefs.json` file
+#' @return Called for its side effect; aborts with an error if the version
+#'   requirement is not met, otherwise returns invisibly.
 #' @author Daniel D. Sjoberg
 #'
 #' @examples
 #' if (interactive()) {
-#'   check_min_rstudio_version()
+#'   check_min_rstudio_version("1.3")
 #' }
 check_min_rstudio_version <- function(version) {
   if (rstudioapi::getVersion() < version) {
@@ -46,7 +48,7 @@ rstudio_config_path <- function(...) {
 #'
 #' Copy of the internal function `usethis:::is_windows()`
 #'
-#' @param ... no used
+#' @param ... not used
 #'
 #' @return logical
 #' @keywords internal
@@ -151,7 +153,7 @@ backup_file <- function(file, quiet = FALSE) {
   # if file does not exist, print msg and skip backup
   if (!fs::file_exists(file)) {
     if (!quiet) {
-      cli::cli_alert_info("File {.val {file}} dose not exist. No backup created.")
+      cli::cli_alert_info("File {.val {file}} does not exist. No backup created.")
     }
     return(invisible(NULL))
   }
@@ -171,7 +173,7 @@ backup_file <- function(file, quiet = FALSE) {
   if (fs::file_exists(fs::path(path_dir, new_file_name))) {
     if (!quiet) {
       paste(
-        "Aboring backup;",
+        "Aborting backup;",
         "file {.val {fs::path(path_dir, new_file_name)}} already exists."
       ) %>%
         cli::cli_alert_danger()
