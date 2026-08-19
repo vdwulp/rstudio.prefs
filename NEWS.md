@@ -2,6 +2,8 @@
 
 * Fixed documentation errors in `check_min_rstudio_version()`, and typos in
   `backup_file()` and `is_windows()`.
+* Moved `check_prefs_consistency()` and `fetch_rstudio_prefs()` alongside
+  `use_rstudio_prefs()`. Updated/increased testing for all three functions.
 
 # rstudio.prefs 0.2.0
 
