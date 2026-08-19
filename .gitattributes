@@ -1,0 +1,7 @@
+* text=auto
+*.R text eol=lf
+*.Rd text eol=lf
+*.md text eol=lf
+*.dcf text eol=lf
+DESCRIPTION text eol=lf
+NAMESPACE text eol=lf

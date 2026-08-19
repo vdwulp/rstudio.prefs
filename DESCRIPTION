@@ -1,6 +1,6 @@
 Package: rstudio.prefs
 Title: Manage 'RStudio' Preferences and Addin Shortcuts
-Version: 0.2.0
+Version: 0.2.0.9000
 Authors@R: c(
     person("S.A.", "van der Wulp", , "vdwulp@gmail.com", role = c("aut", "cre", "cph")),
     person("Daniel D.", "Sjoberg", , "danield.sjoberg@gmail.com", role = c("aut", "cph"),
@@ -36,5 +36,5 @@ Suggests:
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0
 Config/roxygen2/markdown: TRUE
