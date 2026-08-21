@@ -7,28 +7,32 @@
 use_rstudio_prefs(...)
 }
 \arguments{
-\item{...}{series of RStudio preferences to update, e.g.
+\item{...}{a series of RStudio preferences to update, e.g.
 \verb{always_save_history = FALSE, rainbow_parentheses = TRUE}}
 }
 \value{
 Invisibly returns the updated preferences as a named list on success,
 or \code{NULL} if no updates were made (no changes, user aborted, or not in an
+interactive session).
 }
 \description{
-This function updates the RStudio preferences saved in
-the \code{rstudio-prefs.json} file. A full listing of preferences that may be
-modified are listed here
-\url{https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html}
+Updates RStudio preferences in \code{rstudio-prefs.json}.
+}
+\details{
+Preference names, types, and allowed string values are validated against the
+official RStudio preference definitions before applying changes. A full
+listing of preferences is available in the
+\href{https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html}{RStudio documentation}.
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
-# pass preferences individually --------------
+# Pass preferences individually
 use_rstudio_prefs(
   always_save_history = FALSE,
   rainbow_parentheses = TRUE
 )
 
-# pass a list of preferences -----------------
+# Pass a list of preferences
 pref_list <-
   list(always_save_history = FALSE,
        rainbow_parentheses = TRUE)
@@ -37,5 +41,7 @@ use_rstudio_prefs(!!!pref_list)
 \dontshow{\}) # examplesIf}
 }
 \author{
-Daniel D. Sjoberg
+Daniel D. Sjoberg (2021-2022)
+
+S.A. van der Wulp (since 2026)
 }

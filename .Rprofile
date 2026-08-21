@@ -1,5 +1,2 @@
-# this sets the dev folder in the libPath
-tryCatch(
-  devtools::dev_mode(on = TRUE),
-  error = function(e) invisible()
-)
+# Run tests as 'not on cran'
+Sys.setenv(NOT_CRAN = "true")

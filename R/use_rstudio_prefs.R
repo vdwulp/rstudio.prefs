@@ -1,33 +1,37 @@
 #' Set RStudio Preferences
 #'
-#' This function updates the RStudio preferences saved in
-#' the `rstudio-prefs.json` file. A full listing of preferences that may be
-#' modified are listed here
-#' \url{https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html}
+#' Updates RStudio preferences in `rstudio-prefs.json`.
 #'
-#' @param ... series of RStudio preferences to update, e.g.
+#' Preference names, types, and allowed string values are validated against the
+#' official RStudio preference definitions before applying changes. A full
+#' listing of preferences is available in the
+#' \href{https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html}{RStudio documentation}.
+#'
+#' @param ... a series of RStudio preferences to update, e.g.
 #' `always_save_history = FALSE, rainbow_parentheses = TRUE`
 #'
-#' @export
 #' @return Invisibly returns the updated preferences as a named list on success,
 #'   or `NULL` if no updates were made (no changes, user aborted, or not in an
-#’   interactive session).
-#' @author Daniel D. Sjoberg
+#'   interactive session).
+#'
+#' @author Daniel D. Sjoberg (2021-2022)
+#' @author S.A. van der Wulp (since 2026)
 #'
 #' @examplesIf interactive()
-#' # pass preferences individually --------------
+#' # Pass preferences individually
 #' use_rstudio_prefs(
 #'   always_save_history = FALSE,
 #'   rainbow_parentheses = TRUE
 #' )
 #'
-#' # pass a list of preferences -----------------
+#' # Pass a list of preferences
 #' pref_list <-
 #'   list(always_save_history = FALSE,
 #'        rainbow_parentheses = TRUE)
 #'
 #' use_rstudio_prefs(!!!pref_list)
-
+#'
+#' @export
 use_rstudio_prefs <- function(...) {
   # check whether fn may be used -----------------------------------------------
   check_min_rstudio_version("1.3")
@@ -49,15 +53,17 @@ use_rstudio_prefs <- function(...) {
     stats::setNames(names(list_updated_prefs)) %>%
     purrr::compact()
 
-  # check each element of list is length one -----------------------------------
+  # validate updated prefs -----------------------------------------------------
   check_prefs_consistency(list_updated_prefs)
 
   # print updates that will be made --------------------------------------------
   any_update <- pretty_print_updates(list_current_prefs, list_updated_prefs)
+
   # if no updates, abort function execution
   if (!any_update) {
     return(invisible(NULL))
   }
+
   # ask user to abort or not
   if (!startsWith(tolower(readline("Would you like to continue? [y/n] ")), "y")) {
     return(invisible(NULL))
@@ -70,16 +76,14 @@ use_rstudio_prefs <- function(...) {
 }
 
 
-#' Check Validity of User-passed Preferences
+#' Check Validity of User-supplied Preferences
 #'
-#'  Function performs some checks of the user inputs, e.g. the name of the
-#'  preference is checked against the table from
-#'  `fetch_rstudio_prefs()`...if name is not found a warning
-#'  message is printed. The type/class of the input is also checked against
-#'  the expected class (again taken from `fetch_rstudio_prefs()`)
+#' Performs checks of the user inputs against the table from
+#' `fetch_rstudio_prefs()`: preference names, type/class of each value and
+#' string values for preferences with a fixed set of allowed values.
 #'
-#' @param x list of user-passed preferences to update/modify
-#' @keywords internal
+#' @param x list of user-supplied preferences to check
+#'
 #' @noRd
 check_prefs_consistency <- function(x) {
   # check for duplicate names --------------------------------------------------
@@ -106,7 +110,7 @@ check_prefs_consistency <- function(x) {
       cli::cli_alert_danger()
   }
 
-  # check passed types ---------------------------------------------------------
+  # check passed types & string values -----------------------------------------
   purrr::iwalk(
     x,
     function(.x, .y) {
@@ -131,6 +135,22 @@ check_prefs_consistency <- function(x) {
               "Proceed with caution.") %>%
           cli::cli_alert_danger()
       }
+      else if ( # checking allowed string values
+        pref_def_list$class %in% "character" &&
+        grepl("^string \\(.*\\)$", pref_def_list$type) # string followed by allowed values
+      ) {
+        allowed_values <-
+          pref_def_list$type %>%
+          sub("^string \\((.*)\\)$", "\\1", .) %>%
+          strsplit(", ", fixed = TRUE) %>%
+          purrr::pluck(1)
+        if (!.x %in% allowed_values) {
+          paste0("Expecting {.field {.y}} value to be one of [",
+                 paste(sprintf("{.val %s}", allowed_values), collapse = ", "),
+                 "], but it is not. Proceed with caution.") %>%
+            cli::cli_alert_danger()
+        }
+      }
       else if (pref_def_list$class %in% "integer" && !rlang::is_integerish(.x)) {
         paste("Expecting {.field {.y}} to be type {.val integer}, but it is not.",
               "Proceed with caution.") %>%
@@ -141,6 +161,7 @@ check_prefs_consistency <- function(x) {
               "Proceed with caution.") %>%
           cli::cli_alert_danger()
       }
+
       if (pref_def_list$is_scalar && length(.x) > 1) {
         paste("Expecting {.field {.y}} to be length one, but it is not.",
               "Proceed with caution.") %>%
@@ -153,24 +174,21 @@ check_prefs_consistency <- function(x) {
 }
 
 
-#' Fetch table of RStudio Preferences
+#' Fetch RStudio Preferences
 #'
-#' Preferences are fetched from
-#' [https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html](https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html)
+#' Fetches the listing of supported preferences from the
+#' \href{https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html}{RStudio documentation}.
 #'
-#' @section Details:
-#' Only preferences of type `"boolean"`, `"string"`, `"number"`, `"integer"`,
-#' and `"array"`
-#' are fetched from the table.
-#' TODO: Research how type `"object"` are passed and include
-#' in the fetched preferences table.
+#' Only preferences of type `"boolean"`, `"string"`, `"number"` and `"integer"`
+#' are returned. Preferences of type `"array"` and `"object"` are currently not
+#' supported and are ignored.
 #'
-#' @return tibble
-#' @export
+#' @return A tibble containing the RStudio preference definitions.
 #'
 #' @examples
-#'
 #' fetch_rstudio_prefs()
+#'
+#' @export
 fetch_rstudio_prefs <- function() {
   url <- "https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html"
   cli::cli_alert_success("Downloading list of available {.field RStudio} settings")

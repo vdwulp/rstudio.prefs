@@ -2,27 +2,23 @@
 % Please edit documentation in R/use_rstudio_prefs.R
 \name{fetch_rstudio_prefs}
 \alias{fetch_rstudio_prefs}
-\title{Fetch table of RStudio Preferences}
+\title{Fetch RStudio Preferences}
 \usage{
 fetch_rstudio_prefs()
 }
 \value{
-tibble
+A tibble containing the RStudio preference definitions.
 }
 \description{
-Preferences are fetched from
-\url{https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html}
+Fetches the listing of supported preferences from the
+\href{https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html}{RStudio documentation}.
 }
-\section{Details}{
-
-Only preferences of type \code{"boolean"}, \code{"string"}, \code{"number"}, \code{"integer"},
-and \code{"array"}
-are fetched from the table.
-TODO: Research how type \code{"object"} are passed and include
-in the fetched preferences table.
+\details{
+Only preferences of type \code{"boolean"}, \code{"string"}, \code{"number"} and \code{"integer"}
+are returned. Preferences of type \code{"array"} and \code{"object"} are currently not
+supported and are ignored.
 }
-
 \examples{
-
 fetch_rstudio_prefs()
+
 }
