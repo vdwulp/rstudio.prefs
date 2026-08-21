@@ -1,5 +1,12 @@
 # rstudio.prefs (development version)
 
+### Enhancements
+
+* `use_rstudio_prefs()` now validates string type preferences when a fixed set
+  of allowed values is defined ([#13](https://github.com/vdwulp/rstudio.prefs/issues/13)).
+
+### Other
+
 * Fixed documentation errors in `check_min_rstudio_version()`, and typos in
   `backup_file()` and `is_windows()`.
 * Moved `check_prefs_consistency()` and `fetch_rstudio_prefs()` alongside

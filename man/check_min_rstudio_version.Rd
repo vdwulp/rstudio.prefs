@@ -10,8 +10,6 @@ check_min_rstudio_version(version)
 \item{version}{string of min required version number}
 }
 \value{
-path string to RStudio \code{rstudio-prefs.json} file
-
 Called for its side effect; aborts with an error if the version
 requirement is not met, otherwise returns invisibly.
 }

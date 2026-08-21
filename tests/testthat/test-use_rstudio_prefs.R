@@ -171,11 +171,9 @@ test_that("check_prefs_consistency() - warns but does not error on unknown pref 
     fetch_rstudio_prefs = function() df_rstudio_prefs
   )
 
-  suppressMessages(
-    expect_no_error(
-      check_prefs_consistency(
-        list(not_a_pref = TRUE, not_a_pref2 = TRUE, not_a_pref3 = TRUE)
-      )
+  expect_message(
+    check_prefs_consistency(
+      list(not_a_pref = TRUE, not_a_pref2 = TRUE, not_a_pref3 = TRUE)
     )
   )
 })
@@ -185,11 +183,9 @@ test_that("check_prefs_consistency() - warns but does not error on wrong type: l
     fetch_rstudio_prefs = function() df_rstudio_prefs
   )
 
-  suppressMessages(
-    expect_no_error(
-      check_prefs_consistency(
-        list(rainbow_parentheses = "TRUE")
-      )
+  expect_message(
+    check_prefs_consistency(
+      list(rainbow_parentheses = "TRUE")
     )
   )
 })
@@ -199,11 +195,9 @@ test_that("check_prefs_consistency() - warns but does not error on wrong type: s
     fetch_rstudio_prefs = function() df_rstudio_prefs
   )
 
-  suppressMessages(
-    expect_no_error(
-      check_prefs_consistency(
-        list(ansi_console_mode = TRUE)
-      )
+  expect_message(
+    check_prefs_consistency(
+      list(ansi_console_mode = TRUE)
     )
   )
 })
@@ -213,11 +207,9 @@ test_that("check_prefs_consistency() - warns but does not error on wrong type: i
     fetch_rstudio_prefs = function() df_rstudio_prefs
   )
 
-  suppressMessages(
-    expect_no_error(
-      check_prefs_consistency(
-        list(margin_column = "hello")
-      )
+  expect_message(
+    check_prefs_consistency(
+      list(margin_column = "hello")
     )
   )
 })
@@ -227,11 +219,9 @@ test_that("check_prefs_consistency() - warns but does not error on length > 1 fo
     fetch_rstudio_prefs = function() df_rstudio_prefs
   )
 
-  suppressMessages(
-    expect_no_error(
-      check_prefs_consistency(
-        list(margin_column = c(1L, 80L))
-      )
+  expect_message(
+    check_prefs_consistency(
+      list(margin_column = c(1L, 80L))
     )
   )
 })
@@ -241,11 +231,9 @@ test_that("check_prefs_consistency() - warns but does not error on wrong type: n
     fetch_rstudio_prefs = function() df_rstudio_prefs
   )
 
-  suppressMessages(
-    expect_no_error(
-      check_prefs_consistency(
-        list(font_size_points = "hello")
-      )
+  expect_message(
+    check_prefs_consistency(
+      list(font_size_points = "hello")
     )
   )
 })
@@ -255,11 +243,45 @@ test_that("check_prefs_consistency() - no error or warning on valid input", {
     fetch_rstudio_prefs = function() df_rstudio_prefs
   )
 
-  suppressMessages(
-    expect_no_error(
-      check_prefs_consistency(
-        list(rainbow_parentheses = TRUE)
-      )
+  expect_no_condition(
+    check_prefs_consistency(
+      list(rainbow_parentheses = TRUE)
+    )
+  )
+})
+
+test_that("check_prefs_consistency() - warns but does not error on invalid enum string value", {
+  local_mocked_bindings(
+    fetch_rstudio_prefs = function() df_rstudio_prefs
+  )
+
+  expect_message(
+    check_prefs_consistency(
+      list(ansi_console_mode = "not_a_valid_value")
+    )
+  )
+})
+
+test_that("check_prefs_consistency() - no error or warning on valid enum string value", {
+  local_mocked_bindings(
+    fetch_rstudio_prefs = function() df_rstudio_prefs
+  )
+
+  expect_no_condition(
+    check_prefs_consistency(
+      list(ansi_console_mode = "on")
+    )
+  )
+})
+
+test_that("check_prefs_consistency() - no error or warning on valid free-form string pref", {
+  local_mocked_bindings(
+    fetch_rstudio_prefs = function() df_rstudio_prefs
+  )
+
+  expect_no_condition(
+    check_prefs_consistency(
+      list(default_project_location = "~/projects")
     )
   )
 })

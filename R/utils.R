@@ -4,7 +4,6 @@
 #'
 #' @param version string of min required version number
 #' @export
-#' @return path string to RStudio `rstudio-prefs.json` file
 #' @return Called for its side effect; aborts with an error if the version
 #'   requirement is not met, otherwise returns invisibly.
 #' @author Daniel D. Sjoberg
