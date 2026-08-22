@@ -2,15 +2,24 @@
 
 ### Enhancements
 
-* `use_rstudio_prefs()` now validates string type preferences when a fixed set
-  of allowed values is defined ([#13](https://github.com/vdwulp/rstudio.prefs/issues/13)).
+* `use_rstudio_prefs()` now validates string preferences when a fixed set of
+  allowed values is defined and warns on invalid values
+  ([#13](https://github.com/vdwulp/rstudio.prefs/issues/13)).
+
+### Fixes
+
+* `use_rstudio_prefs()` now prevents errors from
+  `rstudioapi::writeRStudioPreference()`, while continuing with other
+  preferences. Preferences with invalid types are skipped, numeric values are
+  converted to the correct type where applicable
+  ([#31](https://github.com/vdwulp/rstudio.prefs/issues/31)).
+* Fixed documentation errors in `check_min_rstudio_version()`, and typos in
+  `backup_file()` and `is_windows()`.
 
 ### Other
 
-* Fixed documentation errors in `check_min_rstudio_version()`, and typos in
-  `backup_file()` and `is_windows()`.
 * Moved `check_prefs_consistency()` and `fetch_rstudio_prefs()` alongside
-  `use_rstudio_prefs()`. Updated/increased testing for all three functions.
+  `use_rstudio_prefs()`. Updated and expanded testing for all three functions.
 
 # rstudio.prefs 0.2.0
 
