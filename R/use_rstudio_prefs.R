@@ -50,11 +50,18 @@ use_rstudio_prefs <- function(...) {
   list_current_prefs <-
     names(list_updated_prefs) %>%
     purrr::map(~rstudioapi::readRStudioPreference(.x, default = NULL)) %>%
-    stats::setNames(names(list_updated_prefs)) %>%
-    purrr::compact()
+    stats::setNames(names(list_updated_prefs))
 
   # validate updated prefs -----------------------------------------------------
-  check_prefs_consistency(list_updated_prefs)
+  list_validated_prefs <- check_prefs_consistency(list_updated_prefs)
+
+  # reconstruct update list ----------------------------------------------------
+  list_updated_prefs <-
+    utils::modifyList(
+      list_current_prefs,
+      list_validated_prefs,
+      keep.null = TRUE
+    )
 
   # print updates that will be made --------------------------------------------
   any_update <- pretty_print_updates(list_current_prefs, list_updated_prefs)
@@ -70,9 +77,9 @@ use_rstudio_prefs <- function(...) {
   }
 
   # update prefs ---------------------------------------------------------------
-  list_updated_prefs %>%
+  list_validated_prefs %>%
     purrr::iwalk(~rstudioapi::writeRStudioPreference(name = .y, value = .x))
-  return(invisible(list_updated_prefs))
+  return(invisible(list_validated_prefs))
 }
 
 
@@ -111,7 +118,7 @@ check_prefs_consistency <- function(x) {
   }
 
   # check passed types & string values -----------------------------------------
-  purrr::iwalk(
+  purrr::imap(
     x,
     function(.x, .y) {
       pref_def_list <-
@@ -119,24 +126,45 @@ check_prefs_consistency <- function(x) {
         dplyr::filter(.data$property %in% .y) %>%
         as.list()
 
-      # if pref is not found in table, move on to the next checks
+      # if pref is not found in table, don't validate, just keep it
       if (rlang::is_empty(pref_def_list$property)) {
-        return(invisible(NULL))
+        return(.x)
       }
 
       # checking passed arguments against expected types
-      if (pref_def_list$class %in% "logical" && !rlang::is_logical(.x)) {
-        paste("Expecting {.field {.y}} to be type {.val logical}, but it is not.",
-              "Proceed with caution.") %>%
+      skip       <- FALSE
+      type_valid <- switch(
+        pref_def_list$class,
+        logical   = rlang::is_logical(.x),
+        character = rlang::is_character(.x),
+        numeric   = if (is.numeric(.x)) {
+          .x <- as.numeric(.x)
+          TRUE
+        } else FALSE,
+        integer   = if (rlang::is_integerish(.x)) {
+          .x <- as.integer(.x)
+          TRUE
+        } else FALSE
+      )
+
+      if (!isTRUE(type_valid)) {
+        skip <- TRUE
+        paste(
+          "Expecting {.field {.y}} to be type {.val {pref_def_list$class}}, but it is not.",
+          "Preference will be skipped."
+        ) %>%
           cli::cli_alert_danger()
       }
-      else if (pref_def_list$class %in% "character" && !rlang::is_character(.x)) {
-        paste("Expecting {.field {.y}} to be type {.val character}, but it is not.",
+
+      # checking passed arguments against expected length and values
+      if (pref_def_list$is_scalar && length(.x) > 1) {
+        paste("Expecting {.field {.y}} to be length one, but it is not.",
               "Proceed with caution.") %>%
           cli::cli_alert_danger()
       }
       else if ( # checking allowed string values
         pref_def_list$class %in% "character" &&
+        rlang::is_character(.x) &&
         grepl("^string \\(.*\\)$", pref_def_list$type) # string followed by allowed values
       ) {
         allowed_values <-
@@ -151,26 +179,11 @@ check_prefs_consistency <- function(x) {
             cli::cli_alert_danger()
         }
       }
-      else if (pref_def_list$class %in% "integer" && !rlang::is_integerish(.x)) {
-        paste("Expecting {.field {.y}} to be type {.val integer}, but it is not.",
-              "Proceed with caution.") %>%
-          cli::cli_alert_danger()
-      }
-      else if (pref_def_list$class %in% "numeric" && !is.numeric(.x)) {
-        paste("Expecting {.field {.y}} to be type {.val numeric}, but it is not.",
-              "Proceed with caution.") %>%
-          cli::cli_alert_danger()
-      }
 
-      if (pref_def_list$is_scalar && length(.x) > 1) {
-        paste("Expecting {.field {.y}} to be length one, but it is not.",
-              "Proceed with caution.") %>%
-          cli::cli_alert_danger()
-      }
+      if (skip) NULL else .x
     }
-  )
-
-  invisible(NULL)
+  ) %>%
+    purrr::compact()
 }
 
 
