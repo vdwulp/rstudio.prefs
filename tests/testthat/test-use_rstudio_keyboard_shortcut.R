@@ -363,6 +363,23 @@ test_that("use_rstudio_keyboard_shortcut() - adding and removing shortcuts in on
 })
 
 
+# invert_list_names_and_values() -----------------------------------------------
+
+test_that("invert_list_names_and_values() - inverts names and values", {
+  expect_equal(
+    invert_list_names_and_values(list(A = "a", B = "b")),
+    list(a = "A", b = "B")
+  )
+})
+
+test_that("invert_list_names_and_values() - returns empty list for empty input", {
+  expect_equal(
+    invert_list_names_and_values(list()),
+    list()
+  )
+})
+
+
 # check_shortcut_consistency() -------------------------------------------------
 
 test_that("check_shortcut_consistency() - unnamed list", {
