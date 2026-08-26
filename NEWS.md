@@ -18,8 +18,9 @@
 
 ### Other
 
-* Moved `check_prefs_consistency()` and `fetch_rstudio_prefs()` alongside
-  `use_rstudio_prefs()`. Updated and expanded testing for all three functions.
+* Reorganized source files to bundle related functions and better reflect their
+  contents.
+* Aligned test files to source files, and expanded test coverage.
 
 # rstudio.prefs 0.2.0
 

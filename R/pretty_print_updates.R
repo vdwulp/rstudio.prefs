@@ -9,7 +9,7 @@ pretty_print_updates <- function(old, new) {
         character(0), # if no overlap with old and new, drop in a placeholder,
       old_value =
         old[names(old) %>% intersect(names(new))] %>%
-        unname() %>% lapply(as.character) %>% unlist() %||%
+        unname() %>% purrr::map_chr(function(x) if (is.null(x)) "*" else as.character(x)) %||%
         character(0) # if no overlap with old and new, drop in a placeholder
     ) %>%
     dplyr::full_join(
@@ -19,8 +19,7 @@ pretty_print_updates <- function(old, new) {
         new_value =
           new %>%
           unname() %>%
-          lapply(function(x) ifelse(is.null(x), "*", as.character(x))) %>%
-          unlist()
+          purrr::map_chr(function(x) if (is.null(x)) "*" else as.character(x))
       ),
       by = "pref"
     ) %>%
@@ -83,10 +82,3 @@ pretty_print_updates <- function(old, new) {
   # return a logical indicating if there were any updates
   return(sum(df_updates$updated) > 0L)
 }
-
-# # CRAN ===============================
-# - R6            [* -> 2.5.0]
-# - Rcpp          [* -> 1.0.6]
-# - askpass       [* -> 1.1]
-# - base64enc     [* -> 0.1-3]
-# - brew          [* -> 1.0-6]
