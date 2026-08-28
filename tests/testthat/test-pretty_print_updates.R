@@ -3,7 +3,7 @@
 # From `use_rstudio_prefs()` call site old and new arguments both contain the
 # same keys, even if the value is NULL.
 
-test_that("pretty_print_updates() - old and new are identical prints No Changes returns FALSE", {
+test_that("pretty_print_updates() - old and new are identical prints No Changes and returns FALSE", {
   expect_output(
     result <- pretty_print_updates(
       list(rainbow_parentheses = TRUE),
@@ -65,6 +65,39 @@ test_that("pretty_print_updates() - mixed: both NULL + change from NULL prints b
       list(rainbow_parentheses = NULL, margin_column = 120L)
     ),
     "No Changes.*rainbow_parentheses.*\\*.*\\*.*Updates.*margin_column.*\\*.*120"
+  )
+  expect_true(result)
+})
+
+test_that("pretty_print_updates() - identical list prints No Changes, collapsed values and returns FALSE", {
+  expect_output(
+    result <- pretty_print_updates(
+      list(busy_exclusion_list = list("tmux", "screen")),
+      list(busy_exclusion_list = list("tmux", "screen"))
+    ),
+    "No Changes.*tmux, screen.*tmux, screen"
+  )
+  expect_false(result)
+})
+
+test_that("pretty_print_updates() - changed list prints Updates, collapsed values and returns TRUE", {
+  expect_output(
+    result <- pretty_print_updates(
+      list(busy_exclusion_list = list("tmux")),
+      list(busy_exclusion_list = list("tmux", "screen"))
+    ),
+    "Updates.*tmux.*tmux, screen"
+  )
+  expect_true(result)
+})
+
+test_that("pretty_print_updates() - change from NULL to empty list prints Updates, * and <empty>, and returns TRUE", {
+  expect_output(
+    result <- pretty_print_updates(
+      list(busy_exclusion_list = NULL),
+      list(busy_exclusion_list = list())
+    ),
+    "Updates.*busy_exclusion_list.*\\*.*<empty>"
   )
   expect_true(result)
 })

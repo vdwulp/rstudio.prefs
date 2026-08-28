@@ -1,33 +1,35 @@
+#' Pretty Print Updates
+#'
+#' Prints a formatted summary of changes, grouped into "No Changes" and
+#' "Updates" sections. Missing or `NULL` values are shown as `*`, an empty list
+#' is shown as `<empty>`.
+#'
+#' Keys present in `new` but absent in `old` are treated as new additions,
+#' with old shown as `*`. Removing a non-existent key (present in `new` as
+#' `NULL`, absent in `old`) appears in "No Changes" with both values shown as
+#' `*`.
+#'
+#' @param old named list of current values (may contain `NULL` values)
+#' @param new named list of intended new values (may contain `NULL` for removals)
+#'
+#' @return `TRUE` if any values changed, `FALSE` otherwise
+#'
+#' @noRd
 pretty_print_updates <- function(old, new) {
   # create data frame with old and new preferences -----------------------------
-  df_updates <-
-    # data frame of old prefs
-    tibble::tibble(
-      pref =
-        names(old) %>%
-        intersect(names(new)) %||%
-        character(0), # if no overlap with old and new, drop in a placeholder,
-      old_value =
-        old[names(old) %>% intersect(names(new))] %>%
-        unname() %>% purrr::map_chr(function(x) if (is.null(x)) "*" else as.character(x)) %||%
-        character(0) # if no overlap with old and new, drop in a placeholder
-    ) %>%
-    dplyr::full_join(
-      # data frame of new prefs
-      tibble::tibble(
-        pref = names(new),
-        new_value =
-          new %>%
-          unname() %>%
-          purrr::map_chr(function(x) if (is.null(x)) "*" else as.character(x))
-      ),
-      by = "pref"
-    ) %>%
-    dplyr::mutate(
-      old_value = ifelse(is.na(.data$old_value), "*", .data$old_value),
-      new_value = ifelse(is.na(.data$new_value), "*", .data$new_value),
-      updated = .data$old_value != .data$new_value
-    )
+  format_val <- function(x) {
+    if (is.null(x)) "*"
+    else if (is.list(x) && length(x) == 0L) "<empty>"
+    else if (is.list(x)) paste(x, collapse = ", ")
+    else as.character(x)
+  }
+
+  df_updates <- tibble::tibble(
+    pref      = names(new),
+    old_value = names(new) %>% lapply(function(nm) format_val(old[[nm]])) %>% unlist(),
+    new_value = new %>% unname() %>% lapply(format_val) %>% unlist(),
+    updated   = .data$old_value != .data$new_value
+  )
 
   # pad each column with trailing spaces ---------------------------------------
   length_total <- df_updates %>% lapply(function(x) nchar(x) %>% max())

@@ -31,6 +31,11 @@
 #'
 #' use_rstudio_prefs(!!!pref_list)
 #'
+#' # Pass array type preference
+#' use_rstudio_prefs(
+#'   busy_exclusion_list = list("tmux", "screen")
+#' )
+#'
 #' @export
 use_rstudio_prefs <- function(...) {
   # check whether fn may be used -----------------------------------------------
@@ -56,12 +61,8 @@ use_rstudio_prefs <- function(...) {
   list_validated_prefs <- check_prefs_consistency(list_updated_prefs)
 
   # reconstruct update list ----------------------------------------------------
-  list_updated_prefs <-
-    utils::modifyList(
-      list_current_prefs,
-      list_validated_prefs,
-      keep.null = TRUE
-    )
+  list_updated_prefs <- list_current_prefs
+  list_updated_prefs[names(list_validated_prefs)] <- list_validated_prefs
 
   # print updates that will be made --------------------------------------------
   any_update <- pretty_print_updates(list_current_prefs, list_updated_prefs)
@@ -128,6 +129,7 @@ check_prefs_consistency <- function(x) {
 
       # if pref is not found in table, don't validate, just keep it
       if (rlang::is_empty(pref_def_list$property)) {
+        if (length(.x) > 1) .x <- as.list(.x)  # coerce to list to handle unknown array prefs
         return(.x)
       }
 
@@ -135,8 +137,8 @@ check_prefs_consistency <- function(x) {
       skip       <- FALSE
       type_valid <- switch(
         pref_def_list$class,
-        logical   = rlang::is_logical(.x),
-        character = rlang::is_character(.x),
+        logical   = is.logical(.x),
+        character = is.character(.x),
         numeric   = if (is.numeric(.x)) {
           .x <- as.numeric(.x)
           TRUE
@@ -144,13 +146,20 @@ check_prefs_consistency <- function(x) {
         integer   = if (rlang::is_integerish(.x)) {
           .x <- as.integer(.x)
           TRUE
+        } else FALSE,
+        array     = if (is.character(.x) || is.list(.x)) {
+          .x <- as.list(.x)
+          all(vapply(.x,     # asserts unnamed list of character scalars
+                     function(e) is.character(e) && length(e) == 1,
+                     logical(1)))
         } else FALSE
       )
 
       if (!isTRUE(type_valid)) {
         skip <- TRUE
+        class <- if (pref_def_list$class == "array") "character vector or list" else pref_def_list$class
         paste(
-          "Expecting {.field {.y}} to be type {.val {pref_def_list$class}}, but it is not.",
+          "Expecting {.field {.y}} to be type {.val {class}}, but it is not.",
           "Preference will be skipped."
         ) %>%
           cli::cli_alert_danger()
@@ -183,7 +192,7 @@ check_prefs_consistency <- function(x) {
       if (skip) NULL else .x
     }
   ) %>%
-    purrr::compact()
+    purrr::keep(function(x) !is.null(x))
 }
 
 
@@ -192,8 +201,8 @@ check_prefs_consistency <- function(x) {
 #' Fetches the listing of supported preferences from the
 #' \href{https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html}{RStudio documentation}.
 #'
-#' Only preferences of type `"boolean"`, `"string"`, `"number"` and `"integer"`
-#' are returned. Preferences of type `"array"` and `"object"` are currently not
+#' Only preferences of type `"boolean"`, `"string"`, `"number"`, `"integer"` and
+#' `"array"` are returned. Preferences of type `"object"` are currently not
 #' supported and are ignored.
 #'
 #' @return A tibble containing the RStudio preference definitions.
@@ -219,7 +228,7 @@ fetch_rstudio_prefs <- function() {
             .data$type %in% "boolean" ~ "logical",
             .data$type %in% "integer" ~ "integer",
             .data$type %in% "number" ~ "numeric",
-            # .data$type %in% "array" ~ "character", # need to do some testing on array types
+            .data$type %in% "array" ~ "array",
             startsWith(.data$type, "string") ~ "character"
           ),
         is_scalar =

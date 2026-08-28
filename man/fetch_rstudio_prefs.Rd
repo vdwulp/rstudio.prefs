@@ -14,8 +14,8 @@ Fetches the listing of supported preferences from the
 \href{https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html}{RStudio documentation}.
 }
 \details{
-Only preferences of type \code{"boolean"}, \code{"string"}, \code{"number"} and \code{"integer"}
-are returned. Preferences of type \code{"array"} and \code{"object"} are currently not
+Only preferences of type \code{"boolean"}, \code{"string"}, \code{"number"}, \code{"integer"} and
+\code{"array"} are returned. Preferences of type \code{"object"} are currently not
 supported and are ignored.
 }
 \examples{

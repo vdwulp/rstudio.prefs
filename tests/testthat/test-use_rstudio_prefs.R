@@ -210,6 +210,36 @@ test_that("use_rstudio_prefs() - aborts when arguments are unnamed", {
   )
 })
 
+test_that("use_rstudio_prefs() - list value for array pref is not recursively merged", {
+  local_mocked_bindings(
+    check_min_rstudio_version = function(...) invisible(NULL),
+    pretty_print_updates = function(...) TRUE,
+    check_prefs_consistency = function(x) x
+  )
+
+  local_mocked_bindings(
+    interactive = function() TRUE,
+    readline = function(prompt) "y",
+    .package = "base"
+  )
+
+  local_mocked_bindings(
+    readRStudioPreference = function(name, default) list("old_value"),
+    writeRStudioPreference = function(name, value) invisible(NULL),
+    .package = "rstudioapi"
+  )
+
+  suppressMessages(
+    result <- use_rstudio_prefs(
+      busy_exclusion_list = list("new_value")
+    )
+  )
+
+  # previous use of modifyList (recursive) would merge array pref into old
+  # values, direct assignment should replace entirely
+  expect_equal(result[["busy_exclusion_list"]], list("new_value"))
+})
+
 
 # check_prefs_consistency() ----------------------------------------------------
 
@@ -316,6 +346,32 @@ test_that("check_prefs_consistency() - warns but does not error on length > 1 fo
   expect_equal(result, list(ansi_console_mode = c("on", "off")))
 })
 
+test_that("check_prefs_consistency() - coerces multi-element character vector to list for unknown pref", {
+  local_mocked_bindings(
+    fetch_rstudio_prefs = function() df_rstudio_prefs
+  )
+
+  expect_message(
+    result <- check_prefs_consistency(
+      list(unknown_pref = c("a", "b"))
+    )
+  )
+  expect_equal(result, list(unknown_pref = list("a", "b")))
+})
+
+test_that("check_prefs_consistency() - coerces multi-element logical vector to list for unknown pref", {
+  local_mocked_bindings(
+    fetch_rstudio_prefs = function() df_rstudio_prefs
+  )
+
+  expect_message(
+    result <- check_prefs_consistency(
+      list(unknown_pref = c(TRUE, FALSE))
+    )
+  )
+  expect_equal(result, list(unknown_pref = list(TRUE, FALSE)))
+})
+
 test_that("check_prefs_consistency() - warns and skips on wrong type: numeric expected", {
   local_mocked_bindings(
     fetch_rstudio_prefs = function() df_rstudio_prefs
@@ -406,6 +462,84 @@ test_that("check_prefs_consistency() - no error or warning on valid free-form st
   )
 })
 
+test_that("check_prefs_consistency() - accepts character vector for array pref", {
+  local_mocked_bindings(
+    fetch_rstudio_prefs = function() df_rstudio_prefs
+  )
+
+  expect_no_condition(
+    result <- check_prefs_consistency(
+      list(busy_exclusion_list = c("foo", "bar"))
+    )
+  )
+  expect_equal(result, list(busy_exclusion_list = list("foo", "bar")))
+})
+
+test_that("check_prefs_consistency() - accepts list of strings for array pref", {
+  local_mocked_bindings(
+    fetch_rstudio_prefs = function() df_rstudio_prefs
+  )
+
+  expect_no_condition(
+    result <- check_prefs_consistency(
+      list(busy_exclusion_list = list("foo", "bar"))
+    )
+  )
+  expect_equal(result, list(busy_exclusion_list = list("foo", "bar")))
+})
+
+test_that("check_prefs_consistency() - warns and skips array pref with non-character elements", {
+  local_mocked_bindings(
+    fetch_rstudio_prefs = function() df_rstudio_prefs
+  )
+
+  expect_message(
+    result <- check_prefs_consistency(
+      list(busy_exclusion_list = list("foo", 42L))
+    )
+  )
+  expect_length(result, 0)
+})
+
+test_that("check_prefs_consistency() - warns and skips array pref with non-character vector", {
+  local_mocked_bindings(
+    fetch_rstudio_prefs = function() df_rstudio_prefs
+  )
+
+  expect_message(
+    result <- check_prefs_consistency(
+      list(busy_exclusion_list = c(1, 2, 3))
+    )
+  )
+  expect_length(result, 0)
+})
+
+test_that("check_prefs_consistency() - accepts empty character vector for array pref", {
+  local_mocked_bindings(
+    fetch_rstudio_prefs = function() df_rstudio_prefs
+  )
+
+  expect_no_condition(
+    result <- check_prefs_consistency(
+      list(busy_exclusion_list = character(0))
+    )
+  )
+  expect_equal(result[["busy_exclusion_list"]], list())
+})
+
+test_that("check_prefs_consistency() - accepts empty list for array pref", {
+  local_mocked_bindings(
+    fetch_rstudio_prefs = function() df_rstudio_prefs
+  )
+
+  expect_no_condition(
+    result <- check_prefs_consistency(
+      list(busy_exclusion_list = list())
+    )
+  )
+  expect_equal(result[["busy_exclusion_list"]], list())
+})
+
 
 # fetch_rstudio_prefs() --------------------------------------------------------
 
@@ -434,7 +568,7 @@ test_that("fetch_rstudio_prefs() - returns only supported types", {
   )
 
   expect_false(any(is.na(result$class)))
-  expect_true(all(result$class %in% c("logical", "integer", "numeric", "character")))
+  expect_true(all(result$class %in% c("logical", "integer", "numeric", "character", "array")))
 })
 
 test_that("fetch_rstudio_prefs() - falls back to built-in data on download error", {

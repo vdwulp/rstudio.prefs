@@ -17,7 +17,7 @@ in the *Global Options* dialog.
 
 ## Installation
 
-Install {rstudio.prefs} from CRAN with:
+Install {rstudio.prefs} from [CRAN](https://cran.r-project.org/package=rstudio.prefs) with:
 
 ``` r
 install.packages("rstudio.prefs")
@@ -34,8 +34,8 @@ devtools::install_github("vdwulp/rstudio.prefs")
 
 ### Set RStudio Preferences
 
-Update the RStudio default preferences.
-Full list of modifiable settings here: https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html
+Update the RStudio preferences. A full listing of preferences is available in
+the [RStudio documentation](https://docs.posit.co/ide/server-pro/admin/reference/session_user_settings.html).
 
 ``` r
 library(rstudio.prefs)
@@ -44,44 +44,42 @@ use_rstudio_prefs(
   always_save_history = FALSE,
   save_workspace = "never",
   load_workspace = FALSE,
-  rainbow_parentheses = TRUE
+  rainbow_parentheses = TRUE,
+  busy_exclusion_list = list("tmux", "screen")
 )
 #> √ Downloading list of available RStudio settings
 #>
 #> == Updates ==================================================
-#> - always_save_history   [TRUE   --> FALSE]
-#> - save_workspace        [ask    --> never]
-#> - load_workspace        [TRUE   --> FALSE]
-#> - rainbow_parentheses   [FALSE  --> TRUE ]
+#> - always_save_history   [TRUE   --> FALSE       ]
+#> - save_workspace        [ask    --> never       ]
+#> - load_workspace        [TRUE   --> FALSE       ]
+#> - rainbow_parentheses   [FALSE  --> TRUE        ]
+#> - busy_exclusion_list   [tmux   --> tmux, screen]
 #> 
 #> Would you like to continue? [y/n] y
-#> √ File 'C:/Users/sjobergd/AppData/Roaming/RStudio/rstudio-prefs 2021-06-20.json' saved as backup.
-#> √ File 'C:/Users/sjobergd/AppData/Roaming/RStudio/rstudio-prefs.json' updated.
-#> * Restart RStudio for updates to take effect.
 ```
+
 ### Add Secondary Repository
 
-Add secondary repositories to the **ROpenSci** and **ddsjoberg** R-Universes.
+Add secondary repositories to the **ROpenSci** and **username** R-Universes.
 This is also helpful for adding secondary RStudio Package Manager repositories.
 
 ``` r
 use_rstudio_secondary_repo(
   ropensci = "https://ropensci.r-universe.dev",
-  ddsjoberg = "https://ddsjoberg.r-universe.dev"
+  username = "https://username.r-universe.dev"
 )
 #> == Updates ==================================================
-#> - ropensci    [*  --> https://ropensci.r-universe.dev ]
-#> - ddsjoberg   [*  --> https://ddsjoberg.r-universe.dev]
+#> - ropensci   [*  --> https://ropensci.r-universe.dev]
+#> - username   [*  --> https://username.r-universe.dev]
 #> 
 #> Would you like to continue? [y/n] y
-#> √ File 'C:/Users/sjobergd/AppData/Roaming/RStudio/rstudio-prefs 2021-06-20.json' saved as backup.
-#> √ File 'C:/Users/sjobergd/AppData/Roaming/RStudio/rstudio-prefs.json' updated.
-#> * Restart RStudio for updates to take effect.
 ```
 
 ### Add Keyboard Shortcut
 
-Use `use_rstudio_keyboard_shortcut()` to programmatically add keyboard shortcuts for add-ins.
+Use `use_rstudio_keyboard_shortcut()` to programmatically add or remove keyboard
+shortcuts for add-ins. To remove a shortcut, pass `NULL` instead of a function.
 
 ```r
 use_rstudio_keyboard_shortcut(
@@ -91,10 +89,13 @@ use_rstudio_keyboard_shortcut(
 #> - Ctrl+Shift+/   [*  --> rstudio.prefs::make_path_norm]
 #> 
 #> Would you like to continue? [y/n] y
-#> √ File 'C:/Users/sjobergd/AppData/Roaming/RStudio/keybindings/addins 2021-06-20.json' saved as backup.
-#> √ File 'C:/Users/sjobergd/AppData/Roaming/RStudio/keybindings/addins.json' updated.
+#> √ File 'C:/Users/username/AppData/Roaming/RStudio/keybindings/addins 2026-08-30.json' saved as backup.
+#> √ File 'C:/Users/username/AppData/Roaming/RStudio/keybindings/addins.json' updated.
 #> * Restart RStudio for updates to take effect.
 ```
+
+As shown in the output **RStudio needs to be restarted** for keyboard shortcut
+changes to take effect.
 
 ## Package history
 {rstudio.prefs} was originally created and developed by
