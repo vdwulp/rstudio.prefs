@@ -7,8 +7,10 @@
 use_rstudio_secondary_repo(...)
 }
 \arguments{
-\item{...}{series of named secondary repositories, e.g.
-\code{ropensci = "https://ropensci.r-universe.dev"}}
+\item{...}{a series of named secondary repositories, e.g.
+\code{ropensci = "https://ropensci.r-universe.dev"}. Pass \code{NULL} to remove a
+repository, e.g. \code{ropensci = NULL}. If a URL is passed under a new name,
+the old name is removed.}
 }
 \value{
 Invisibly returns the updated \code{cran_mirror} preference as a named
@@ -16,25 +18,22 @@ list on success, or \code{NULL} if no updates were made (no changes, user
 aborted, or not in an interactive session).
 }
 \description{
-This function updates the RStudio preferences saved in
-the \code{rstudio-prefs.json} file to include the secondary repositories
-passed by the user. If a new name for an existing repository is
-passed by the user, the name will be updated in the JSON file.
-}
-\details{
-A note for users outside of the USA.
-If the country in \code{.$cran_mirror$country} has not been previously recorded
-in the JSON preferences file (typically, auto set by RStudio),
-the \code{use_rstudio_secondary_repo()} function will set \code{"country" = "us"}.
+Updates the secondary repositories in \code{rstudio-prefs.json}.
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+# Add a repository
 use_rstudio_secondary_repo(
   ropensci = "https://ropensci.r-universe.dev",
-  ddsjoberg = "https://ddsjoberg.r-universe.dev"
+  username = "https://username.r-universe.dev"
 )
+
+# Remove a repository
+use_rstudio_secondary_repo(ropensci = NULL)
 \dontshow{\}) # examplesIf}
 }
 \author{
-Daniel D. Sjoberg
+Daniel D. Sjoberg (2021-2022)
+
+S.A. van der Wulp (since 2026)
 }

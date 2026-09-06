@@ -1,30 +1,30 @@
 #' Set RStudio Secondary Repository
 #'
-#' This function updates the RStudio preferences saved in
-#' the `rstudio-prefs.json` file to include the secondary repositories
-#' passed by the user. If a new name for an existing repository is
-#' passed by the user, the name will be updated in the JSON file.
+#' Updates the secondary repositories in `rstudio-prefs.json`.
 #'
-#' A note for users outside of the USA.
-#' If the country in `.$cran_mirror$country` has not been previously recorded
-#' in the JSON preferences file (typically, auto set by RStudio),
-#' the `use_rstudio_secondary_repo()` function will set `"country" = "us"`.
+#' @param ... a series of named secondary repositories, e.g.
+#'   `ropensci = "https://ropensci.r-universe.dev"`. Pass `NULL` to remove a
+#'   repository, e.g. `ropensci = NULL`. If a URL is passed under a new name,
+#'   the old name is removed.
 #'
-#' @param ... series of named secondary repositories, e.g.
-#' `ropensci = "https://ropensci.r-universe.dev"`
-#'
-#' @export
 #' @return Invisibly returns the updated `cran_mirror` preference as a named
 #'   list on success, or `NULL` if no updates were made (no changes, user
 #'   aborted, or not in an interactive session).
-#' @author Daniel D. Sjoberg
+#'
+#' @author Daniel D. Sjoberg (2021-2022)
+#' @author S.A. van der Wulp (since 2026)
 #'
 #' @examplesIf interactive()
+#' # Add a repository
 #' use_rstudio_secondary_repo(
 #'   ropensci = "https://ropensci.r-universe.dev",
-#'   ddsjoberg = "https://ddsjoberg.r-universe.dev"
+#'   username = "https://username.r-universe.dev"
 #' )
-
+#'
+#' # Remove a repository
+#' use_rstudio_secondary_repo(ropensci = NULL)
+#'
+#' @export
 use_rstudio_secondary_repo <- function(...) {
   # check whether fn may be used -----------------------------------------------
   check_min_rstudio_version("1.3")
@@ -39,25 +39,26 @@ use_rstudio_secondary_repo <- function(...) {
   if (!rlang::is_named(user_passed_updated_repos)) {
     rlang::abort("Each argument must be named.")
   }
+
   list_current_cran_mirror <-
     rstudioapi::readRStudioPreference("cran_mirror", default = NULL)
 
-  # if no secondary repos exist, create the structure for them -----------------
+  # if no secondary repos exist, create the default structure for them ---------
   if (is.null(list_current_cran_mirror)) {
-    # i took these values from my own settings...may need to be modified for broader use
     list_current_cran_mirror <-
       list("name" = "Global (CDN)",
            "host" = "RStudio",
            "url" = "https://cran.rstudio.com/",
            "repos" = "",
            "country" = "us",
-           "secondary" = NULL)
+           "secondary" = "")
   }
 
   # parse the secondary repo string --------------------------------------------
   current_repos <-
     repo_string_as_named_list(list_current_cran_mirror$secondary)
 
+  # adjust lists ---------------------------------------------------------------
   user_passed_updated_repos <-
     union(
       # if one of the new repos has the same value but new name as a previous
@@ -69,14 +70,20 @@ use_rstudio_secondary_repo <- function(...) {
     purrr::compact() %>%
     {stats::setNames(rep_len(list(NULL), length.out = length(.)), .)} %>%
     # add user-defined repos to the list
-    purrr::list_modify(!!!purrr::compact(user_passed_updated_repos))
+    purrr::list_modify(!!!user_passed_updated_repos)
+
+  # add names from user passed repos to current that don't exist yet (with NULL value)
+  current_repos[names(user_passed_updated_repos)] <-
+    current_repos[names(user_passed_updated_repos)]
 
   # print updates that will be made --------------------------------------------
   any_update <- pretty_print_updates(current_repos, user_passed_updated_repos)
+
   # if no updates, abort function execution
   if (!any_update) {
     return(invisible(NULL))
   }
+
   # ask user to abort or not
   if (!startsWith(tolower(readline("Would you like to continue? [y/n] ")), "y")) {
     return(invisible(NULL))
@@ -84,8 +91,7 @@ use_rstudio_secondary_repo <- function(...) {
 
   # create final list of repos -------------------------------------------------
   list_current_cran_mirror$secondary <-
-    current_repos %>%
-    purrr::update_list(!!!user_passed_updated_repos) %>%
+    utils::modifyList(current_repos, user_passed_updated_repos) %>%
     purrr::imap_chr(~paste0(.y, "|", .x)) %>%
     paste(collapse = "|")
 

@@ -29,6 +29,15 @@
   preferences. Preferences with invalid types are skipped, numeric values are
   converted to the correct type where applicable
   ([#31](https://github.com/vdwulp/rstudio.prefs/issues/31)).
+
+* Replaced deprecated `purrr::update_list()` with base R `modifyList()` in
+  `use_rstudio_secondary_repo()`. This replacement also fixed removal of the old
+  repo name when its URL is reassigned to a new name, instead of leaving it as
+  an empty entry.
+
+* Fixed error when removing a non-existent secondary repo with
+  `use_rstudio_secondary_repo(repo_name = NULL)`.
+
 * Fixed documentation errors in `check_min_rstudio_version()`, and typos in
   `backup_file()` and `is_windows()`.
 
@@ -36,7 +45,9 @@
 
 * Reorganized source files to bundle related functions and better reflect their
   contents.
+
 * Aligned test files to source files, and expanded test coverage.
+
 
 # rstudio.prefs 0.2.0
 
@@ -75,6 +86,7 @@
 
 * Modernized package title, description, internal prefs data and GitHub Actions
   workflows. Increased testing coverage.
+
 
 # rstudio.prefs 0.1.9
 
