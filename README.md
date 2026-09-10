@@ -1,4 +1,5 @@
 # ⚙️ rstudio.prefs
+<img src="man/figures/logo.png" align="right" width="150" style="float:right; width:150px;" class="pkgdown-hide">
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/rstudio.prefs)](https://CRAN.R-project.org/package=rstudio.prefs)

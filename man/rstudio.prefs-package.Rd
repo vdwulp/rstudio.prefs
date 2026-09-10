@@ -6,6 +6,8 @@
 \alias{rstudio.prefs-package}
 \title{rstudio.prefs: Manage 'RStudio' Preferences and Addin Shortcuts}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Provides an interface for working with 'RStudio' preference files to modify settings and addin shortcuts without using point-and-click option menus. Useful for ensuring a unified experience across devices and for enforcing best practices. Also exposes some settings not available in the Global Options dialog.
 }
 \seealso{
