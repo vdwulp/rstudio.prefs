@@ -7,6 +7,7 @@ test_that("use_rstudio_keyboard_shortcut() - returns NULL when not interactive",
 
   local_mocked_bindings(
     interactive = function() FALSE,              # <-- not interactive
+    readline = function(prompt) stop("readline should not be called"),
     .package = "base"
   )
 
@@ -59,15 +60,17 @@ test_that("use_rstudio_keyboard_shortcut() - returns NULL when user declines", {
 })
 
 test_that("use_rstudio_keyboard_shortcut() - returns updated list when .write_json = FALSE", {
+  tmp <- withr::local_tempdir()
+
   local_mocked_bindings(
     check_min_rstudio_version = function(...) invisible(NULL),
     pretty_print_updates = function(...) TRUE,
-    rstudio_config_path = function(x) file.path(withr::local_tempdir(), x)
+    rstudio_config_path = function(x) file.path(tmp, x)
   )
 
   local_mocked_bindings(
     interactive = function() TRUE,
-    readline = function(prompt) "y",
+    readline = function(prompt) stop("readline should not be called"),
     .package = "base"
   )
 
@@ -81,6 +84,41 @@ test_that("use_rstudio_keyboard_shortcut() - returns updated list when .write_js
   expect_type(result, "list")
   expect_equal(result[["make_path_norm"]], "Ctrl+Shift+/")
   expect_length(result, 1)
+  expect_false(fs::dir_exists(file.path(tmp, "keybindings")))
+})
+
+test_that("use_rstudio_keyboard_shortcut() - returns current list when .write_json = FALSE without updates", {
+  tmp <- withr::local_tempdir()
+  updates_printed <- FALSE
+
+  local_mocked_bindings(
+    check_min_rstudio_version = function(...) invisible(NULL),
+    pretty_print_updates = function(...) {
+      updates_printed <<- TRUE
+      FALSE
+    },
+    rstudio_config_path = function(x) file.path(tmp, x)
+  )
+
+  local_mocked_bindings(
+    interactive = function() TRUE,
+    readline = function(prompt) stop("readline should not be called"),
+    .package = "base"
+  )
+
+  # Establish an existing shortcut
+  fs::dir_create(file.path(tmp, "keybindings"))
+  jsonlite::write_json(
+    list("make_path_norm" = "Ctrl+Shift+/"),
+    file.path(tmp, "keybindings/addins.json"),
+    auto_unbox = TRUE
+  )
+
+  # Get current shortcuts
+  result <- use_rstudio_keyboard_shortcut(.write_json = FALSE)
+
+  expect_true(updates_printed)
+  expect_equal(result, list("make_path_norm" = "Ctrl+Shift+/"))
 })
 
 test_that("use_rstudio_keyboard_shortcut() - writes JSON when .write_json = TRUE", {
@@ -146,6 +184,40 @@ test_that("use_rstudio_keyboard_shortcut() - removes shortcut when NULL value pa
   written <- jsonlite::fromJSON(file.path(tmp, "keybindings/addins.json"))
   expect_false("make_path_norm" %in% names(written))
   expect_length(written, 0)
+})
+
+test_that("use_rstudio_keyboard_shortcut() - removing non-existent shortcut returns NULL", {
+  tmp <- withr::local_tempdir()
+
+  local_mocked_bindings(
+    check_min_rstudio_version = function(...) invisible(NULL),
+    rstudio_config_path = function(x) file.path(tmp, x)
+  )
+
+  local_mocked_bindings(
+    interactive = function() TRUE,
+    readline = function(prompt) stop("readline should not be called"),
+    .package = "base"
+  )
+
+  # Establish an existing shortcut
+  fs::dir_create(file.path(tmp, "keybindings"))
+  jsonlite::write_json(
+    list("make_path_norm" = "Ctrl+Shift+/"),
+    file.path(tmp, "keybindings/addins.json"),
+    auto_unbox = TRUE
+  )
+
+  # Remove a shortcut that is not present
+  capture.output(
+    suppressMessages(
+      result <- use_rstudio_keyboard_shortcut(
+        "Ctrl+Shift+K" = NULL
+      )
+    )
+  )
+
+  expect_null(result)
 })
 
 test_that("use_rstudio_keyboard_shortcut() - reassigning function removes old key binding", {
@@ -271,7 +343,7 @@ test_that("use_rstudio_keyboard_shortcut() - adding multiple shortcuts in one ca
 
   local_mocked_bindings(
     interactive = function() TRUE,
-    readline = function(prompt) "y",
+    readline = function(prompt) stop("readline should not be called"),
     .package = "base"
   )
 
@@ -300,7 +372,7 @@ test_that("use_rstudio_keyboard_shortcut() - removing multiple shortcuts in one 
 
   local_mocked_bindings(
     interactive = function() TRUE,
-    readline = function(prompt) "y",
+    readline = function(prompt) stop("readline should not be called"),
     .package = "base"
   )
 

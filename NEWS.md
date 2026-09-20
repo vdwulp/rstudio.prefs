@@ -22,6 +22,10 @@
   allowed values is defined and warns on invalid values
   ([#13](https://github.com/vdwulp/rstudio.prefs/issues/13)).
 
+* `use_rstudio_keyboard_shortcut(.write_json = FALSE)` now also returns the
+  current shortcuts when called without updates, and no longer asks for
+  confirmation ([#30](https://github.com/vdwulp/rstudio.prefs/issues/30)).
+
 ### Fixes
 
 * `use_rstudio_prefs()` now prevents errors from
@@ -37,6 +41,11 @@
 
 * Fixed error when removing a non-existent secondary repo with
   `use_rstudio_secondary_repo(repo_name = NULL)`.
+
+* `use_rstudio_keyboard_shortcut()` no longer creates the `keybindings`
+  directory when not needed, and no longer creates empty `editor_bindings.json`
+  and `rstudio_bindings.json` files
+  ([#30](https://github.com/vdwulp/rstudio.prefs/issues/30)).
 
 * Fixed documentation errors in `check_min_rstudio_version()`, and typos in
   `backup_file()` and `is_windows()`.
