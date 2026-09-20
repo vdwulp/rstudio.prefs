@@ -5,8 +5,9 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  workflow_dispatch:
 
-name: test-coverage.yaml
+name: test coverage
 
 permissions: read-all
 
