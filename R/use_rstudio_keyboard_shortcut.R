@@ -15,10 +15,11 @@
 #' @param .backup logical indicating whether to create a back-up of shortcuts
 #' file before it's updated. Default is `TRUE`.
 #'
-#' @export
 #' @return When `.write_json = FALSE`, a named list of all shortcuts including
 #'   the updates. Otherwise `NULL` invisibly.
-#' @author Daniel D. Sjoberg
+#'
+#' @author Daniel D. Sjoberg (2021-2022)
+#' @author S.A. van der Wulp (since 2026)
 #'
 #' @examplesIf interactive()
 #' # Add a shortcut
@@ -30,7 +31,8 @@
 #' use_rstudio_keyboard_shortcut(
 #'   "Ctrl+Shift+/" = NULL
 #' )
-
+#'
+#' @export
 use_rstudio_keyboard_shortcut <- function(..., .write_json = TRUE, .backup = TRUE) {
   # check whether fn may be used -----------------------------------------------
   check_min_rstudio_version("1.3")

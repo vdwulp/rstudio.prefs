@@ -289,3 +289,17 @@ test_that("repo_string_as_named_list() - returns empty list for NULL input", {
     list()
   )
 })
+
+test_that("repo_string_as_named_list() - handles repo without URL", {
+  expect_equal(
+    repo_string_as_named_list("orphan"),
+    list(orphan = "")
+  )
+})
+
+test_that("repo_string_as_named_list() - handles repo with empty URL", {
+  expect_equal(
+    repo_string_as_named_list("orphan|"),
+    list(orphan = "")
+  )
+})

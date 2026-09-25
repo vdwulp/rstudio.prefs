@@ -108,25 +108,33 @@ use_rstudio_secondary_repo <- function(...) {
 #'
 #' The secondary repo string uses `|` to separate the repo names and their
 #' values, as well as two different repos, e.g.
-#' `'ropensci|https://ropensci.r-universe.dev|ddsjoberg|https://ddsjoberg.r-universe.dev'`.
+#' `'ropensci|https://ropensci.r-universe.dev|username|https://username.r-universe.dev'`.
 #'
 #' @param x secondary repository string from
 #' `"rstudio-prefs.json"` --> `"cran_mirror"` --> `"secondary"`
-#' @export
+#'
 #' @return named list
-#' @author Daniel D. Sjoberg
+#'
+#' @author Daniel D. Sjoberg (2021-2022)
+#' @author S.A. van der Wulp (since 2026)
 #'
 #' @examples
 #' repo_string_as_named_list(
-#'   'ropensci|https://ropensci.r-universe.dev|ddsjoberg|https://ddsjoberg.r-universe.dev'
+#'   'ropensci|https://ropensci.r-universe.dev|username|https://username.r-universe.dev'
 #' )
+#'
+#' @export
 repo_string_as_named_list <- function(x) {
   if (is.null(x)) return(list())
+
   # split string by |
   xx <- strsplit(x, "|", fixed = TRUE) %>% unlist()
 
+  # add empty URL for unpaired repository name
+  if (length(xx) %% 2L != 0L) xx <- c(xx, "")
+
   # use every other element as the value and the name and return as list
-  xx[!as.logical(seq_len(length(xx)) %% 2)] %>%
-    stats::setNames(xx[as.logical(seq_len(length(xx)) %% 2)]) %>%
+  xx[seq_along(xx) %% 2L == 0L] %>%
+    stats::setNames(xx[seq_along(xx) %% 2L == 1L]) %>%
     as.list()
 }

@@ -43,5 +43,7 @@ use_rstudio_keyboard_shortcut(
 \dontshow{\}) # examplesIf}
 }
 \author{
-Daniel D. Sjoberg
+Daniel D. Sjoberg (2021-2022)
+
+S.A. van der Wulp (since 2026)
 }

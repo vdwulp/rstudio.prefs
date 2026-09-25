@@ -42,6 +42,9 @@
 * Fixed error when removing a non-existent secondary repo with
   `use_rstudio_secondary_repo(repo_name = NULL)`.
 
+* Fixed error in `repo_string_as_named_list()` when the last repository URL
+  value is absent or empty.
+
 * `use_rstudio_keyboard_shortcut()` no longer creates the `keybindings`
   directory when not needed, and no longer creates empty `editor_bindings.json`
   and `rstudio_bindings.json` files
@@ -62,7 +65,7 @@
 
 # rstudio.prefs 0.2.0
 
-### New
+### Enhancements
 
 * `use_rstudio_keyboard_shortcut()` now supports shortcut removal by passing
   `NULL` as the value ([#22](https://github.com/vdwulp/rstudio.prefs/issues/22)).
