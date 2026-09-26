@@ -1,6 +1,6 @@
 Package: rstudio.prefs
 Title: Manage 'RStudio' Preferences and Addin Shortcuts
-Version: 0.2.0.9000
+Version: 0.3.0
 Authors@R: c(
     person("S.A.", "van der Wulp", , "vdwulp@gmail.com", role = c("aut", "cre", "cph")),
     person("Daniel D.", "Sjoberg", , "danield.sjoberg@gmail.com", role = c("aut", "cph"),
