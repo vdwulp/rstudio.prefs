@@ -4,6 +4,8 @@
 
 * Updated `make_path_norm()` documentation.
 
+* Added [Umami](https://umami.is/) statistics to all pkgdown webpages.
+
 * Addressed some linting suggestions.
 
 

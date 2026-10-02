@@ -2,6 +2,12 @@ url: https://vdwulp.github.io/rstudio.prefs
 
 template:
   bootstrap: 5
+  includes:
+    in_header: |
+      <script
+        defer
+        src="https://cloud.umami.is/script.js"
+        data-website-id="b7b1bc4a-4212-4419-b97b-3cc79719e795"></script>
 
 authors:
   "Daniel D. Sjoberg":
