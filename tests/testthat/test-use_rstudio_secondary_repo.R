@@ -31,11 +31,14 @@ test_that("use_rstudio_secondary_repo() - returns NULL when no updates needed", 
   )
 
   local_mocked_bindings(
-    readRStudioPreference = function(name, default)
-      list(name = "Global (CDN)", host = "RStudio",
-           url = "https://cran.rstudio.com/", repos = "",
+    readRStudioPreference = function(name, default) {
+      list(name = "Global (CDN)",
+           host = "RStudio",
+           url = "https://cran.rstudio.com/",
+           repos = "",
            country = "us",
-           secondary = "ropensci|https://ropensci.r-universe.dev"),
+           secondary = "ropensci|https://ropensci.r-universe.dev")
+    },
     .package = "rstudioapi"
   )
 
@@ -131,11 +134,14 @@ test_that("use_rstudio_secondary_repo() - adds repo to existing secondary repos"
   )
 
   local_mocked_bindings(
-    readRStudioPreference = function(name, default)
-      list(name = "Global (CDN)", host = "RStudio",
-           url = "https://cran.rstudio.com/", repos = "",
+    readRStudioPreference = function(name, default) {
+      list(name = "Global (CDN)",
+           host = "RStudio",
+           url = "https://cran.rstudio.com/",
+           repos = "",
            country = "us",
-           secondary = "ropensci|https://ropensci.r-universe.dev"),
+           secondary = "ropensci|https://ropensci.r-universe.dev")
+    },
     writeRStudioPreference = function(name, value) invisible(NULL),
     .package = "rstudioapi"
   )
@@ -162,11 +168,14 @@ test_that("use_rstudio_secondary_repo() - renames repo with same URL", {
   )
 
   local_mocked_bindings(
-    readRStudioPreference = function(name, default)
-      list(name = "Global (CDN)", host = "RStudio",
-           url = "https://cran.rstudio.com/", repos = "",
+    readRStudioPreference = function(name, default) {
+      list(name = "Global (CDN)",
+           host = "RStudio",
+           url = "https://cran.rstudio.com/",
+           repos = "",
            country = "us",
-           secondary = "oldname|https://ropensci.r-universe.dev"),
+           secondary = "oldname|https://ropensci.r-universe.dev")
+    },
     writeRStudioPreference = function(name, value) invisible(NULL),
     .package = "rstudioapi"
   )
@@ -193,11 +202,14 @@ test_that("use_rstudio_secondary_repo() - replaces repo with same name", {
   )
 
   local_mocked_bindings(
-    readRStudioPreference = function(name, default)
-      list(name = "Global (CDN)", host = "RStudio",
-           url = "https://cran.rstudio.com/", repos = "",
+    readRStudioPreference = function(name, default) {
+      list(name = "Global (CDN)",
+           host = "RStudio",
+           url = "https://cran.rstudio.com/",
+           repos = "",
            country = "us",
-           secondary = "unirepo|https://ropensci.r-universe.dev"),
+           secondary = "unirepo|https://ropensci.r-universe.dev")
+    },
     writeRStudioPreference = function(name, value) invisible(NULL),
     .package = "rstudioapi"
   )
@@ -224,11 +236,14 @@ test_that("use_rstudio_secondary_repo() - removes repo passed with value NULL", 
   )
 
   local_mocked_bindings(
-    readRStudioPreference = function(name, default)
-      list(name = "Global (CDN)", host = "RStudio",
-           url = "https://cran.rstudio.com/", repos = "",
+    readRStudioPreference = function(name, default) {
+      list(name = "Global (CDN)",
+           host = "RStudio",
+           url = "https://cran.rstudio.com/",
+           repos = "",
            country = "us",
-           secondary = "ropensci|https://ropensci.r-universe.dev|username|https://username.r-universe.dev"),
+           secondary = "ropensci|https://ropensci.r-universe.dev|username|https://username.r-universe.dev")
+    },
     writeRStudioPreference = function(name, value) invisible(NULL),
     .package = "rstudioapi"
   )
@@ -253,11 +268,14 @@ test_that("use_rstudio_secondary_repo() - returns NULL when removing non-existen
   )
 
   local_mocked_bindings(
-    readRStudioPreference = function(name, default)
-      list(name = "Global (CDN)", host = "RStudio",
-           url = "https://cran.rstudio.com/", repos = "",
+    readRStudioPreference = function(name, default) {
+      list(name = "Global (CDN)",
+           host = "RStudio",
+           url = "https://cran.rstudio.com/",
+           repos = "",
            country = "us",
-           secondary = "ropensci|https://ropensci.r-universe.dev"),
+           secondary = "ropensci|https://ropensci.r-universe.dev")
+    },
     .package = "rstudioapi"
   )
 
@@ -277,7 +295,7 @@ test_that("use_rstudio_secondary_repo() - returns NULL when removing non-existen
 
 test_that("repo_string_as_named_list() - converts string to named list", {
   expect_equal(
-    repo_string_as_named_list('ropensci|https://ropensci.r-universe.dev|username|https://username.r-universe.dev'),
+    repo_string_as_named_list("ropensci|https://ropensci.r-universe.dev|username|https://username.r-universe.dev"),
     list(ropensci = "https://ropensci.r-universe.dev",
          username = "https://username.r-universe.dev")
   )

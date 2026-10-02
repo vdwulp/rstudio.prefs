@@ -82,5 +82,5 @@ pretty_print_updates <- function(old, new) {
   }
 
   # return a logical indicating if there were any updates
-  return(sum(df_updates$updated) > 0L)
+  sum(df_updates$updated) > 0L
 }

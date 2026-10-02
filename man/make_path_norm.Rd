@@ -2,40 +2,42 @@
 % Please edit documentation in R/add_ins.R
 \name{make_path_norm}
 \alias{make_path_norm}
-\title{Normalize Path Add-in}
+\title{Normalize Path RStudio Addin}
 \usage{
 make_path_norm()
 }
-\value{
-normalized path string
-}
 \description{
-Wrapper to execute \code{\link[fs:path_norm]{fs::path_norm()}} as a shortcut on
-highlighted text. The updated text will be converted in place to a path
-normalized for the environment currently in use.
-For instance, \ or \\\ will be converted to / on Windows machines.
-See below for process of setting shortcut.
+Wrapper to execute \code{\link[fs:path_norm]{fs::path_norm()}} as a shortcut on highlighted text. The
+updated text will be converted in place to a path normalized for the
+environment currently in use. For instance, \ or \\\ will be converted to /
+on Windows machines. See below for process of setting a shortcut.
 }
 \details{
-Add keyboard shortcut for \code{make_path_norm()} in RStudio, use the
-\code{use_rstudio_keyboard_shortcut()} function. Do add it manually,
-follow the instructions below.
+To add a keyboard shortcut for \code{make_path_norm()} in RStudio, use the
+\code{\link[=use_rstudio_keyboard_shortcut]{use_rstudio_keyboard_shortcut()}} function as shown in the example. This
+demonstrates the use of \code{rstudio.prefs} to set a keyboard shortcut.
+
+To add a keyboard shortcut manually, follow these steps:
 \itemize{
-\item Install rstudio.prefs, and restart RStudio
-\item Select "Tools" --> "Modify Keyboard Shortcuts...".
-\item In Search box, type "Make Path Normal".
-\item Click in the "Shortcut" column on the "Make Path Normal" row.
-\item Press intended shortcut keys (suggested: \verb{Ctrl+Shift+/}) to set shortcut.
-\item NOTE: It is possible to override a previously specified key combination with this selection.
+\item Install rstudio.prefs,
+\item Restart RStudio,
+\item Select \code{Tools} > \verb{Modify Keyboard Shortcuts...},
+\item In the \code{Search} box, type \verb{Make Path Normal},
+\item In the \code{Shortcut} column click on the \verb{Make Path Normal} row,
+\item Press intended shortcut keys to set shortcut (suggested: \verb{Ctrl+Shift+/}).
 }
+
+NOTE: It is possible to override a previously specified key combination with
+this selection.
 }
 \examples{
 if (interactive()) {
-  # set a keyboard shortcut for path normalization
+  # Set a keyboard shortcut for path normalization
   rstudio.prefs::use_rstudio_keyboard_shortcut(
     "Ctrl+Shift+/" = "rstudio.prefs::make_path_norm"
   )
 }
+
 }
 \seealso{
 \link[fs:path_norm]{fs::path_norm}

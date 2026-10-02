@@ -36,8 +36,7 @@ check_min_rstudio_version <- function(version) {
 rstudio_config_path <- function(...) {
   if (is_windows()) {
     base <- rappdirs::user_config_dir("RStudio", appauthor = NULL)
-  }
-  else {
+  } else {
     base <- rappdirs::user_config_dir("rstudio", os = "unix")
   }
   fs::path(base, ...)
@@ -124,7 +123,7 @@ write_json <- function(x, path, .backup) {
   if (isTRUE(.backup)) backup_file(path)
 
   # if folder does not exist, create folder
-  if(!fs::dir_exists(fs::path_dir(path))) {
+  if (!fs::dir_exists(fs::path_dir(path))) {
     fs::dir_create(fs::path_dir(path))
   }
 

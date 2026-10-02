@@ -27,7 +27,7 @@ install.packages("rstudio.prefs")
 Install the development version of {rstudio.prefs} from [GitHub](https://github.com/vdwulp/rstudio.prefs) with:
 
 ``` r
-# install.packages('devtools')
+# install.packages("devtools")
 devtools::install_github("vdwulp/rstudio.prefs")
 ```
 

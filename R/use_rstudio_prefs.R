@@ -80,7 +80,8 @@ use_rstudio_prefs <- function(...) {
   # update prefs ---------------------------------------------------------------
   list_validated_prefs %>%
     purrr::iwalk(~rstudioapi::writeRStudioPreference(name = .y, value = .x))
-  return(invisible(list_validated_prefs))
+
+  invisible(list_validated_prefs)
 }
 
 
@@ -142,22 +143,31 @@ check_prefs_consistency <- function(x) {
         numeric   = if (is.numeric(.x)) {
           .x <- as.numeric(.x)
           TRUE
-        } else FALSE,
+        } else {
+          FALSE
+        },
         integer   = if (rlang::is_integerish(.x)) {
           .x <- as.integer(.x)
           TRUE
-        } else FALSE,
+        } else {
+          FALSE
+        },
         array     = if (is.character(.x) || is.list(.x)) {
           .x <- as.list(.x)
           all(vapply(.x,     # asserts unnamed list of character scalars
                      function(e) is.character(e) && length(e) == 1,
                      logical(1)))
-        } else FALSE
+        } else {
+          FALSE
+        }
       )
 
       if (!isTRUE(type_valid)) {
         skip <- TRUE
-        class <- if (pref_def_list$class == "array") "character vector or list" else pref_def_list$class
+        class <- if (pref_def_list$class == "array")
+          "character vector or list"
+        else
+          pref_def_list$class
         paste(
           "Expecting {.field {.y}} to be type {.val {class}}, but it is not.",
           "Preference will be skipped."
@@ -170,12 +180,10 @@ check_prefs_consistency <- function(x) {
         paste("Expecting {.field {.y}} to be length one, but it is not.",
               "Proceed with caution.") %>%
           cli::cli_alert_danger()
-      }
-      else if ( # checking allowed string values
-        pref_def_list$class %in% "character" &&
-        rlang::is_character(.x) &&
-        grepl("^string \\(.*\\)$", pref_def_list$type) # string followed by allowed values
-      ) {
+      } else if (pref_def_list$class %in% "character" &&
+                   rlang::is_character(.x) &&
+                   grepl("^string \\(.*\\)$", pref_def_list$type)) {
+        # check allowed string values
         allowed_values <-
           pref_def_list$type %>%
           sub("^string \\((.*)\\)$", "\\1", .) %>%

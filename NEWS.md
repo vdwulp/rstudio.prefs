@@ -1,3 +1,12 @@
+# rstudio.prefs (development version)
+
+### Other
+
+* Updated `make_path_norm()` documentation.
+
+* Addressed some linting suggestions.
+
+
 # rstudio.prefs 0.3.0
 
 ### Enhancements
@@ -68,7 +77,8 @@
 ### Enhancements
 
 * `use_rstudio_keyboard_shortcut()` now supports shortcut removal by passing
-  `NULL` as the value ([#22](https://github.com/vdwulp/rstudio.prefs/issues/22)).
+  `NULL` as the value
+  ([#22](https://github.com/vdwulp/rstudio.prefs/issues/22)).
 
 ### Fixes
 
@@ -104,11 +114,11 @@
 
 # rstudio.prefs 0.1.9
 
-* Fix for `use_rstudio_secondary_repo()` when it is used to set the first secondary repository. (#14)
+* Fix for `use_rstudio_secondary_repo()` when it is used to set the first secondary repository. ([#14](https://github.com/vdwulp/rstudio.prefs/issues/14))
 
-* Updated `use_rstudio_prefs()` and `use_rstudio_secondary_repo()` to use the {rstudioapi} package to read and write RStudio preferences instead of manually manipulating the preferences JSON file. (#12)
+* Updated `use_rstudio_prefs()` and `use_rstudio_secondary_repo()` to use the {rstudioapi} package to read and write RStudio preferences instead of manually manipulating the preferences JSON file. ([#12](https://github.com/vdwulp/rstudio.prefs/issues/12))
 
-* Corrected the folder location of the app data folder from `RStudio` to `rstudio` on Unix. (#11)
+* Corrected the folder location of the app data folder from `RStudio` to `rstudio` on Unix. ([#11](https://github.com/vdwulp/rstudio.prefs/issues/11))
 
 # rstudio.prefs 0.1.8
 
@@ -130,7 +140,7 @@
 
 * Repositories may now be removed with `use_rstudio_secondary_repo(repo_name = NULL)`.
 
-* Updated documentation for `use_rstudio_secondary_repo()` to indicate when the country will be set to US.
+* Updated documentation for `use_rstudio_secondary_repo()` to indicate when the country will be set to US. ([#6](https://github.com/vdwulp/rstudio.prefs/issues/6))
 
 # rstudio.prefs 0.1.5
 

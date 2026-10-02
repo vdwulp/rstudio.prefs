@@ -568,7 +568,11 @@ test_that("fetch_rstudio_prefs() - returns only supported types", {
   )
 
   expect_false(any(is.na(result$class)))
-  expect_true(all(result$class %in% c("logical", "integer", "numeric", "character", "array")))
+  expect_true(all(result$class %in% c("logical",
+                                      "integer",
+                                      "numeric",
+                                      "character",
+                                      "array")))
 })
 
 test_that("fetch_rstudio_prefs() - falls back to built-in data on download error", {

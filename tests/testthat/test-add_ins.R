@@ -4,10 +4,10 @@ test_that("make_path_norm() - passes normalized path to modifyRange", {
   modified <- NULL
 
   local_mocked_bindings(
-    getActiveDocumentContext = function() list(
-      id = "test_id",
-      selection = list(list(range = list(), text = "a/./b"))
-    ),
+    getActiveDocumentContext = function() {
+      list(id = "test_id",
+           selection = list(list(range = list(), text = "a/./b")))
+    },
     modifyRange = function(range, text, id) modified <<- text,
     .package = "rstudioapi"
   )
@@ -20,10 +20,10 @@ test_that("make_path_norm() - flips backslashes to forward slashes", {
   modified <- NULL
 
   local_mocked_bindings(
-    getActiveDocumentContext = function() list(
-      id = "test_id",
-      selection = list(list(range = list(), text = "a\\b"))
-    ),
+    getActiveDocumentContext = function() {
+      list(id = "test_id",
+           selection = list(list(range = list(), text = "a\\b")))
+    },
     modifyRange = function(range, text, id) modified <<- text,
     .package = "rstudioapi"
   )
@@ -36,14 +36,14 @@ test_that("make_path_norm() - normalizes multiple selections", {
   modified <- list()
 
   local_mocked_bindings(
-    getActiveDocumentContext = function() list(
-      id = "test_id",
-      selection = list(
-        list(range = list(), text = "a/./b"),
-        list(range = list(), text = "c\\d")
-      )
-    ),
-    modifyRange = function(range, text, id) modified[[length(modified) + 1]] <<- text,
+    getActiveDocumentContext = function() {
+      list(id = "test_id",
+           selection = list(list(range = list(), text = "a/./b"),
+                            list(range = list(), text = "c\\d")))
+    },
+    modifyRange = function(range, text, id) {
+      modified[[length(modified) + 1]] <<- text
+    },
     .package = "rstudioapi"
   )
 

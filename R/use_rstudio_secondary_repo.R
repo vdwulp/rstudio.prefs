@@ -100,7 +100,7 @@ use_rstudio_secondary_repo <- function(...) {
     name = "cran_mirror",
     value = list_current_cran_mirror
   )
-  return(invisible(list_current_cran_mirror))
+  invisible(list_current_cran_mirror)
 }
 
 
