@@ -4,7 +4,9 @@
 
 * Updated `make_path_norm()` documentation.
 
-* Added [Umami](https://umami.is/) statistics to all pkgdown webpages.
+* Added [Umami](https://umami.is/) statistics and
+  [GitHub Sponsors](https://github.com/sponsors/vdwulp) button to all pkgdown
+  webpages.
 
 * Addressed some linting suggestions.
 

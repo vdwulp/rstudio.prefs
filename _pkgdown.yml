@@ -8,6 +8,14 @@ template:
         defer
         src="https://cloud.umami.is/script.js"
         data-website-id="b7b1bc4a-4212-4419-b97b-3cc79719e795"></script>
+    after_navbar: |
+      <span style="display: flex; align-items: center;
+        align-self: center; line-height: 0">
+        <iframe src="https://github.com/sponsors/vdwulp/button"
+          title="Sponsor vdwulp" width="114" height="32"
+          style="display: block; border: 0; border-radius: 6px">
+        </iframe>
+      </span>
 
 authors:
   "Daniel D. Sjoberg":
