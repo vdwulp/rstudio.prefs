@@ -106,10 +106,10 @@ test_that("use_rstudio_keyboard_shortcut() - returns current list when .write_js
     .package = "base"
   )
 
-  # Establish an existing shortcut
+  # Establish an assigned shortcut alongside empty bindings
   fs::dir_create(file.path(tmp, "keybindings"))
   jsonlite::write_json(
-    list("make_path_norm" = "Ctrl+Shift+/"),
+    list("make_path_norm" = "Ctrl+Shift+/", "print" = "", "identity" = ""),
     file.path(tmp, "keybindings/addins.json"),
     auto_unbox = TRUE
   )
@@ -432,6 +432,51 @@ test_that("use_rstudio_keyboard_shortcut() - adding and removing shortcuts in on
   expect_equal(written[["make_path_norm"]], "Ctrl+Shift+/")
   expect_false("print" %in% names(written))
   expect_length(written, 1)
+})
+
+test_that("use_rstudio_keyboard_shortcut() - ignores empty bindings", {
+  tmp <- withr::local_tempdir()
+  path <- file.path(tmp, "keybindings/addins.json")
+
+  local_mocked_bindings(
+    check_min_rstudio_version = function(...) invisible(NULL),
+    rstudio_config_path = function(x) file.path(tmp, x)
+  )
+
+  local_mocked_bindings(
+    interactive = function() TRUE,
+    readline = function(prompt) "y",
+    .package = "base"
+  )
+
+  # Establish empty bindings alongside an assigned shortcut
+  fs::dir_create(file.path(tmp, "keybindings"))
+  jsonlite::write_json(
+    list("make_path_norm" = "", "print" = "", "identity" = "Ctrl+Shift+I"),
+    path,
+    auto_unbox = TRUE
+  )
+
+  output <- capture.output(
+    suppressMessages(
+      result <- use_rstudio_keyboard_shortcut(
+        "Ctrl+Shift+/" = "make_path_norm"
+      )
+    )
+  )
+
+  # Only the new assignment should appear in the summary
+  expect_false(any(grepl("No Changes", output, fixed = TRUE)))
+  expect_true(any(grepl("Updates", output, fixed = TRUE)))
+  expect_true(any(grepl("make_path_norm", output, fixed = TRUE)))
+
+  # Preserve assigned shortcuts and omit unrelated empty bindings
+  expect_null(result)
+  written <- jsonlite::fromJSON(path)
+  expect_equal(written[["make_path_norm"]], "Ctrl+Shift+/")
+  expect_equal(written[["identity"]], "Ctrl+Shift+I")
+  expect_false("print" %in% names(written))
+  expect_length(written, 2)
 })
 
 

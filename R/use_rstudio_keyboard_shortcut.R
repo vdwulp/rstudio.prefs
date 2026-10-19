@@ -55,6 +55,11 @@ use_rstudio_keyboard_shortcut <- function(..., .write_json = TRUE, .backup = TRU
     ) %||%
     list()
 
+  # remove empty bindings left after removing via RStudio menus ----------------
+  list_current_shortcuts <- list_current_shortcuts[
+    unlist(list_current_shortcuts) != ""
+  ]
+
   # invert list names and values -----------------------------------------------
   i_list_current_shortcuts <- invert_list_names_and_values(list_current_shortcuts)
 

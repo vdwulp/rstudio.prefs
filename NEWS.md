@@ -1,5 +1,12 @@
 # rstudio.prefs (development version)
 
+### Fixes
+
+* `use_rstudio_keyboard_shortcut()` now ignores empty bindings left after
+  removal via RStudio menus, removing unnecessary blank "No Changes" output,
+  without changing correct shortcut registration. Empty bindings are omitted
+  when `addins.json` is updated.
+
 ### Other
 
 * Updated `make_path_norm()` documentation.
